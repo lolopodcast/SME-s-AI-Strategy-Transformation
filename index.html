@@ -83,7 +83,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect, useRef, useMemo } = React;
         
         // --- INTERNAL ICON SYSTEM ---
         const IconBase = ({ children, size = 24, className = "" }) => (
@@ -126,6 +126,54 @@
         const SafeIcon = ({ name, size = 24, className, ...props }) => {
             const IconComponent = Icons[name];
             return IconComponent ? <IconComponent size={size} className={className} {...props} /> : null;
+        };
+
+        // --- RAG KNOWLEDGE BASE ---
+        const RAG_KNOWLEDGE = [
+            {
+                keywords: ["budget", "cost", "money", "resource", "fund", "預算", "成本", "錢", "資源", "資金"],
+                tc: "根據我們的資源配置策略 (Resource Allocation Strategy)，建議採納 **40-30-20-10 法則**：\n• **40% 數據工程**：這是最大的隱形成本，包含清洗歷史髒數據與 API 串接。\n• **30% 軟體設施**：雲端訂閱與 SaaS 授權。\n• **20% 變革管理**：員工賦能與種子人員獎金。\n• **10% 維運**：模型上線後的調校。",
+                en: "Based on our Resource Allocation Strategy, we recommend the **40-30-20-10 Rule**:\n• **40% Data Engineering**: The biggest hidden cost (cleaning dirty data, APIs).\n• **30% Software/Infrastructure**: Cloud subscriptions and SaaS licenses.\n• **20% Change Management**: Employee training and incentives.\n• **10% Maintenance**: Post-deployment model tuning."
+            },
+            {
+                keywords: ["start", "first step", "begin", "roadmap", "time", "開始", "第一步", "起點", "時程", "階段"],
+                tc: "導入架構分為三個階段 (12個月)：\n1. **數位化地基 (Month 1-3)**：建立單一數據源 (SSOT)，不談高深演算法，先解決單一痛點取得速贏 (Quick Win)。\n2. **流程改善 (Month 4-8)**：導入預測模型優化現有流程。\n3. **AI 智能化 (Month 9-12+)**：擴大應用至決策輔助與商業模式創新。",
+                en: "The implementation roadmap covers 3 phases (12 months):\n1. **Digital Foundation (M1-3)**: Build a Single Source of Truth (SSOT). Aim for a 'Quick Win' by solving one specific pain point.\n2. **Process Improvement (M4-8)**: Use predictive models to optimize workflows.\n3. **AI Intelligence (M9-12+)**: Expand to decision support and business model innovation."
+            },
+            {
+                keywords: ["resistance", "employee", "culture", "fear", "fail", "people", "抗拒", "員工", "文化", "害怕", "失敗", "人"],
+                tc: "變革最大的敵人是「組織慣性」。我們建議使用 **3P 模型** (Position, Process, People) 進行分析。針對人員抗拒，應採取以下戰術：\n1. **建立急迫感**：說明不改變的危機。\n2. **溝通願景**：強調 AI 是「副駕駛」來減少重複勞動，而非取代他們。\n3. **賦能**：提供足夠的工具與獎金 (如報工準確率獎金)。",
+                en: "The biggest enemy is 'Organizational Inertia'. We use the **3P Model** (Position, Process, People). To handle resistance:\n1. **Create Urgency**: Explain the risk of doing nothing.\n2. **Communicate Vision**: Emphasize AI as a 'Co-pilot' to reduce drudgery, not replace jobs.\n3. **Empowerment**: Provide tools and incentives (e.g., bonuses for data accuracy)."
+            },
+            {
+                keywords: ["data", "gigo", "silo", "quality", "clean", "數據", "資料", "品質", "清洗", "孤島"],
+                tc: "數據是 AI 的燃料。請記住 **GIGO (Garbage In, Garbage Out)** 原則。首要任務是打破部門間的「數據孤島」(Data Silos)，建立組織層級的「單一數據源」(SSOT)。如果是老舊系統，建議採用 **Cold Start (冷啟動)** 策略：不依賴過去的髒數據，而是從導入日開始累積高品質的新數據。",
+                en: "Data is fuel. Remember **GIGO (Garbage In, Garbage Out)**. The priority is breaking 'Data Silos' to create a 'Single Source of Truth' (SSOT). For legacy systems, use a **Cold Start** strategy: Don't rely on dirty historical data; start collecting high-quality new data from day one."
+            },
+            {
+                keywords: ["kpi", "roi", "measure", "value", "benefit", "指標", "效益", "價值", "評估", "回報"],
+                tc: "KPI 設定應包含：\n1. **效率指標**：如報價查找時間縮短 30%、排班耗時減少 50%。\n2. **品質指標**：如庫存預測準確率提升、報廢率降低。\n3. **財務指標**：如毛利率提升、營收增加。\n切記也要評估「無形效益」(Soft Benefits)，如決策速度變快與員工滿意度。",
+                en: "KPIs should include:\n1. **Efficiency**: e.g., Quote search time -30%, Scheduling time -50%.\n2. **Quality**: e.g., Forecast accuracy up, Waste down.\n3. **Financial**: e.g., Gross margin up, Revenue up.\nAlso consider 'Soft Benefits' like faster decision-making and employee satisfaction."
+            }
+        ];
+
+        const INDUSTRY_CONTEXT = {
+            machining: {
+                tc: "針對**機械加工業**，核心痛點通常是「報價失準」與「排程混亂」。\n建議從 **IoT 數據採集** 開始，收集機台真實工時，建立精準的成本模型。這能直接解決「接單黑箱」問題。",
+                en: "For **Machining**, key pain points are usually 'Inaccurate Quotes' and 'Chaotic Scheduling'.\nStart with **IoT Data Collection** to track actual machine hours and build a precise cost model. This solves the 'Black Box Orders' problem."
+            },
+            retail: {
+                tc: "針對**食品零售業**，核心痛點是「高報廢率」與「缺貨」。\n建議優先導入 **AI 銷量預測**，結合天氣與節假日數據，優化進貨與排班。速贏項目可以是「即期品動態定價」。",
+                en: "For **Food Retail**, key pain points are 'High Waste' and 'Stockouts'.\nPrioritize **AI Sales Prediction** using weather and holiday data to optimize stock and shifts. A Quick Win could be 'Dynamic Pricing for near-expiry items'."
+            },
+            healthcare: {
+                tc: "針對**智慧醫療**，核心是「病患流動」與「隱私合規」。\n建議從 **HIS 數據清洗** 開始，利用 AI 預測候診人數以優化排班。注意：必須採用聯邦學習或地端部署以符合法規。",
+                en: "For **Healthcare**, the focus is 'Patient Flow' and 'Privacy'.\nStart with **HIS Data Cleaning** and use AI to predict patient volume for staffing. Note: Use Federated Learning or on-premise deployment for compliance."
+            },
+            agriculture: {
+                tc: "針對**精準農業**，挑戰在於「氣候變異」與「人力短缺」。\n建議部署 **微氣候感測器 (IoT)**，累積數據後建立產量預測模型。速贏項目是自動化灌溉系統。",
+                en: "For **Agriculture**, challenges are 'Climate Variation' and 'Labor Shortage'.\nDeploy **Micro-climate Sensors (IoT)** first. Build yield prediction models later. A Quick Win is an automated irrigation system."
+            }
         };
 
         // --- CONTENT DATA (Bilingual) ---
@@ -893,6 +941,25 @@
                 }
             };
 
+            // --- RAG LOGIC ---
+            const findBestMatch = (query) => {
+                const lowerQuery = query.toLowerCase();
+                let bestMatch = null;
+                let maxScore = 0;
+
+                for (const item of RAG_KNOWLEDGE) {
+                    let score = 0;
+                    item.keywords.forEach(kw => {
+                        if (lowerQuery.includes(kw)) score += 1;
+                    });
+                    if (score > maxScore) {
+                        maxScore = score;
+                        bestMatch = item;
+                    }
+                }
+                return maxScore > 0 ? bestMatch : null;
+            };
+
             const handleChatSubmit = (e) => {
                 e.preventDefault();
                 if (!chatInput.trim()) return;
@@ -903,18 +970,31 @@
                 
                 setTimeout(() => {
                     let reply = "";
-                    const lq = query.toLowerCase();
+                    
                     if (!selectedIndustry) {
-                        reply = "Please select an industry first.";
-                    } else if (lq.includes("budget") || lq.includes("預算") || lq.includes("resource")) {
-                        reply = lang === 'TC' ? "根據 40-30-20-10 法則：40% 用於數據工程(最重要但常被忽略)，30% 軟體設施，20% 變革管理，10% 維運模型。" : "40-30-20-10 rule: 40% Data Engineering, 30% Software, 20% Change Mgmt, 10% Maintenance.";
-                    } else if (lq.includes("start") || lq.includes("開始") || lq.includes("step")) {
-                        reply = lang === 'TC' ? "建議從「單一數據源」(SSOT) 開始，並在該產業中找到一個具體的「速贏項目」(Quick Win)。" : "Start with a 'Single Source of Truth' (SSOT) and a 'Quick Win' project.";
+                        reply = lang === 'TC' ? "請先選擇產業。" : "Please select an industry first.";
                     } else {
-                        reply = lang === 'TC' ? "這是個好問題。建議您參考「變革管理」章節，並確認數據品質 (避免 GIGO)。" : "Good question. Refer to 'Change Management' and check data quality (GIGO).";
+                        // 1. Find Concept in Knowledge Base
+                        const knowledge = findBestMatch(query);
+                        
+                        // 2. Find Industry Context
+                        const indCtx = INDUSTRY_CONTEXT[selectedIndustry];
+                        const indText = lang === 'TC' ? indCtx.tc : indCtx.en;
+
+                        if (knowledge) {
+                            // RAG HIT: Combine Concept + Industry Context
+                            const kText = lang === 'TC' ? knowledge.tc : knowledge.en;
+                            reply = `${kText}\n\n💡 **${lang==='TC'?'產業應用':'Industry Context'}**: ${indText}`;
+                        } else {
+                            // RAG MISS: Fallback to General Advice
+                            const fallback = lang === 'TC' 
+                                ? "這是一個好問題。根據您的產業特性，建議先盤點現有數據品質，並尋找一個無需投入大量硬體的速贏項目 (Quick Win)。" 
+                                : "That's a good question. Based on your industry, we recommend auditing your data quality first and finding a Quick Win that requires minimal hardware investment.";
+                            reply = `${fallback}\n\n💡 **${lang==='TC'?'參考方向':'Reference'}**: ${indText}`;
+                        }
                     }
                     setChatHistory(prev => [...prev, { role: 'bot', text: reply }]);
-                }, 600);
+                }, 800);
             };
 
             const handleTTS = (text) => {
@@ -1127,7 +1207,7 @@
                             {chatHistory.map((msg, i) => (
                                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up group`}>
                                     <div className={`max-w-[80%] p-3 rounded-2xl shadow-sm text-sm relative ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-white dark:bg-slate-700 dark:text-white rounded-bl-none'}`}>
-                                        {msg.text}
+                                        <div className="whitespace-pre-line leading-relaxed">{msg.text}</div>
                                         <button onClick={() => copyToClipboard(msg.text, i)} className={`absolute top-1 right-1 p-1 rounded hover:bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity`}>
                                             {copiedIndex === i ? <SafeIcon name="CheckCircle" size={12}/> : <SafeIcon name="Copy" size={12}/>}
                                         </button>
