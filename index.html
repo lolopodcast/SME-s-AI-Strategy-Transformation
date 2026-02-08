@@ -48,16 +48,17 @@
                     animation: {
                         'flip': 'flip 0.6s preserve-3d',
                         'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'fade-in-right': 'fadeInRight 0.3s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeIn: {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' },
                         },
-                        fadeInRight: {
-                            '0%': { opacity: '0', transform: 'translateX(-20px)' },
-                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
                         }
                     }
                 }
@@ -85,56 +86,44 @@
         const { useState, useEffect, useRef } = React;
         
         // --- INTERNAL ICON SYSTEM (ZERO DEPENDENCY) ---
-        
         const IconBase = ({ children, size = 24, className = "" }) => (
-            <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width={size} 
-                height={size} 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                className={className}
-            >
-                {children}
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
         );
 
         const Icons = {
-            Menu: (props) => <IconBase {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></IconBase>,
-            X: (props) => <IconBase {...props}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconBase>,
-            Sun: (props) => <IconBase {...props}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41-1.41"/><path d="m19.07 4.93-1.41 1.41"/></IconBase>,
-            Moon: (props) => <IconBase {...props}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></IconBase>,
-            Globe: (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></IconBase>,
-            ChevronDown: (props) => <IconBase {...props}><path d="m6 9 6 6 6-6"/></IconBase>,
-            ChevronUp: (props) => <IconBase {...props}><path d="m18 15-6-6-6 6"/></IconBase>,
-            MessageSquare: (props) => <IconBase {...props}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></IconBase>,
-            Layout: (props) => <IconBase {...props}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></IconBase>,
-            Briefcase: (props) => <IconBase {...props}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></IconBase>,
-            Target: (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></IconBase>,
-            Clock: (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></IconBase>,
-            BookOpen: (props) => <IconBase {...props}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></IconBase>,
-            User: (props) => <IconBase {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></IconBase>,
-            Settings: (props) => <IconBase {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></IconBase>,
-            Download: (props) => <IconBase {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></IconBase>,
-            Volume2: (props) => <IconBase {...props}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></IconBase>,
-            RefreshCw: (props) => <IconBase {...props}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></IconBase>,
-            CheckCircle: (props) => <IconBase {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m22 4-12 12-4-4"/></IconBase>,
-            Brain: (props) => <IconBase {...props}><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></IconBase>,
-            PauseCircle: (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><line x1="10" x2="10" y1="15" y2="9"/><line x1="14" x2="14" y1="15" y2="9"/></IconBase>,
-            ArrowRight: (props) => <IconBase {...props}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconBase>,
-            Save: (props) => <IconBase {...props}><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></IconBase>
+            Menu: (p) => <IconBase {...p}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></IconBase>,
+            X: (p) => <IconBase {...p}><path d="M18 6 6 18"/><path d="m6 6 12 12"/></IconBase>,
+            Sun: (p) => <IconBase {...p}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41-1.41"/><path d="m19.07 4.93-1.41 1.41"/></IconBase>,
+            Moon: (p) => <IconBase {...p}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></IconBase>,
+            Globe: (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></IconBase>,
+            ChevronDown: (p) => <IconBase {...p}><path d="m6 9 6 6 6-6"/></IconBase>,
+            MessageSquare: (p) => <IconBase {...p}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></IconBase>,
+            Layout: (p) => <IconBase {...p}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></IconBase>,
+            Briefcase: (p) => <IconBase {...p}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></IconBase>,
+            Target: (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></IconBase>,
+            Clock: (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></IconBase>,
+            BookOpen: (p) => <IconBase {...p}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></IconBase>,
+            User: (p) => <IconBase {...p}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></IconBase>,
+            Settings: (p) => <IconBase {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></IconBase>,
+            Download: (p) => <IconBase {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></IconBase>,
+            Volume2: (p) => <IconBase {...p}><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></IconBase>,
+            RefreshCw: (p) => <IconBase {...p}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></IconBase>,
+            CheckCircle: (p) => <IconBase {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m22 4-12 12-4-4"/></IconBase>,
+            Brain: (p) => <IconBase {...p}><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></IconBase>,
+            PauseCircle: (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><line x1="10" x2="10" y1="15" y2="9"/><line x1="14" x2="14" y1="15" y2="9"/></IconBase>,
+            ArrowRight: (p) => <IconBase {...p}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></IconBase>,
+            Save: (p) => <IconBase {...p}><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></IconBase>,
+            Stethoscope: (p) => <IconBase {...p}><path d="M4.8 2.3A.3.3 0 0 1 5 2h14a.3.3 0 0 1 .2.3v3.3a.3.3 0 0 1-.3.3H18a1 1 0 0 0-1 1v2.4a3 3 0 0 1-6 0V6a1 1 0 0 0-1-1H5a.3.3 0 0 1-.3-.3V2.3z"/><path d="M11 15.5a2 2 0 1 1 2 2 2 2 0 0 1-2-2z"/><circle cx="12" cy="19" r="2"/></IconBase>,
+            Sprout: (p) => <IconBase {...p}><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></IconBase>,
+            TrendingUp: (p) => <IconBase {...p}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></IconBase>,
+            Shield: (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></IconBase>,
+            Zap: (p) => <IconBase {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconBase>,
+            Award: (p) => <IconBase {...p}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></IconBase>
         };
 
         const SafeIcon = ({ name, size = 24, className, ...props }) => {
             const IconComponent = Icons[name];
-            if (!IconComponent) {
-                return <span className="text-xs font-mono text-gray-400">[{name}]</span>;
-            }
-            return <IconComponent size={size} className={className} {...props} />;
+            return IconComponent ? <IconComponent size={size} className={className} {...props} /> : null;
         };
 
         // --- CONTENT DATA (Bilingual) ---
@@ -144,8 +133,7 @@
                 nav: {
                     overview: "A. 概要",
                     learning: "B. 學習區",
-                    industry: "C. 產業選擇",
-                    consulting: "D. 顧問諮詢",
+                    combined: "C. 產業與諮詢",
                     planning: "E. 策略規劃",
                     history: "F. 歷程紀錄"
                 },
@@ -158,122 +146,118 @@
                     correct: "正確",
                     wrong: "錯誤",
                     score: "得分",
-                    voice: "語音導覽"
+                    voice: "語音導覽",
+                    progress: "學習進度",
+                    badges: "成就徽章"
                 },
                 overview: {
                     title: "中小企業 AI 導入與組織變革執行計畫",
                     subtitle: "數據驅動營運轉型策略",
                     core: "核心理念：擴增智慧 (Augmented Intelligence)",
                     desc: "本計畫旨在建立一套新的管理體系，從「依賴經驗的營運」轉向「可被量測、預測與管理的數據驅動營運」。AI 不在於取代人類，而是作為「副駕駛」輔助決策。",
-                    author: "Prof. Shihmin Lo"
+                    author: "Prof. Shihmin Lo",
+                    metrics: [
+                        { label: "平均效率提升", val: "35%", icon: "TrendingUp" },
+                        { label: "導入成功率", val: "80%+", icon: "CheckCircle" },
+                        { label: "變革適應期", val: "3-6月", icon: "Clock" }
+                    ]
                 },
                 learning: {
                     topics: [
-                        { id: 'sme', title: "1. 中小企業特性與現狀" },
-                        { id: 'change', title: "2. 組織變革與慣性 (3P)" },
+                        { id: 'sme', title: "1. 中小企業特性" },
+                        { id: 'change', title: "2. 3P 組織變革" },
                         { id: 'dx', title: "3. 數位轉型層次" },
-                        { id: 'ai', title: "4. AI 定義與分類" }
+                        { id: 'ai', title: "4. AI 定義與分類" },
+                        { id: 'method', title: "5. 實施方法論" },
+                        { id: 'data', title: "6. 數據策略" },
+                        { id: 'roi', title: "7. ROI 與 KPI" },
+                        { id: 'tactic', title: "8. 變革戰術" }
                     ],
                     content: {
                         sme: {
-                            title: "中小企業 (SME) 的定義與優勢",
-                            text: "台灣中小企業佔全體企業約 98%，是經濟的隱形冠軍。特性在於資源有限但決策彈性高。常見風險包含人才斷層、數位化程度低、以及二代接班的磨合期。AI 導入需採「以小博大」策略，專注於解決特定痛點。",
-                            terms: [
-                                { t: "Hidden Champions", d: "隱形冠軍，指在細分市場市占率高但在大眾知名度低的中小企業。" },
-                                { t: "Succession Gap", d: "傳承斷層，指資深師傅退休後，經驗無法有效移轉給年輕世代的風險。" }
-                            ],
-                            cards: [
-                                { f: "中小企業最大優勢？", b: "決策流程短、市場反應速度快、彈性高。" },
-                                { f: "常見數位化障礙？", b: "預算不足、缺乏IT人才、抗拒改變(慣性)。" }
-                            ],
-                            quiz: [
-                                { q: "台灣中小企業佔比約為多少？", options: ["50%", "70%", "98%", "30%"], ans: 2 },
-                                { q: "以下何者不是中小企業的典型優勢？", options: ["決策彈性", "資金雄厚", "反應快速", "客製化能力"], ans: 1 },
-                                { q: "導入 AI 時，中小企業應優先考量？", options: ["購買最貴硬體", "解決單一痛點", "全面無人化", "建立大型機房"], ans: 1 },
-                                { q: "「隱形冠軍」通常指？", options: ["市占率低的大企業", "知名度高的品牌", "細分市場的強者", "剛成立的新創"], ans: 2 }
-                            ]
+                            title: "中小企業 (SME) 的特性",
+                            text: "台灣中小企業佔98%，是隱形冠軍。優勢為決策快、彈性高；劣勢為資源少、人才斷層。AI 策略應採「以小博大」，解決特定痛點取得速贏 (Quick Win)。",
+                            terms: [{t:"Hidden Champions", d:"隱形冠軍：細分市場市佔高但低調的企業。"}],
+                            cards: [{f:"最大優勢？", b:"彈性與速度"}, {f:"常見障礙？", b:"預算、人才、慣性"}],
+                            quiz: [{q:"中小企業佔比？", options:["50%","98%","30%"], ans:1}, {q:"優先策略？", options:["全面導入","解決痛點","購買昂貴硬體"], ans:1}]
                         },
                         change: {
                             title: "組織變革與 3P 模型",
-                            text: "變革是為了適應外部環境。成敗關鍵在於克服「組織慣性」。我們使用 3P 模型分析：Position (策略定位)、Process (作業流程)、People (人員文化)。唯有三者同步調整，技術才能落地。",
-                            terms: [
-                                { t: "Organizational Inertia", d: "組織慣性，組織維持現狀、抗拒改變的力量。" },
-                                { t: "3P Model", d: "Position (定位), Process (流程), People (人)。" }
-                            ],
-                            cards: [
-                                { f: "變革中最難改變的是？", b: "People (人員思維與文化)。" },
-                                { f: "Position 在 3P 中代表？", b: "策略定位與目標設定。" }
-                            ],
-                            quiz: [
-                                { q: "3P 模型不包含下列哪項？", options: ["Position", "Process", "Product", "People"], ans: 2 },
-                                { q: "變革失敗最常見的原因是？", options: ["技術太難", "資金不足", "組織慣性", "硬體老舊"], ans: 2 },
-                                { q: "AI 導入屬於 3P 中的哪一環？", options: ["僅 Process", "僅 Position", "涉及全部 3P", "僅 People"], ans: 2 },
-                                { q: "克服慣性的最佳時機？", options: ["危機發生時", "獲利最高時", "任何時候", "老闆退休時"], ans: 0 }
-                            ]
+                            text: "克服「組織慣性」是關鍵。3P 模型：Position (定位)、Process (流程)、People (人員)。唯有三者同步調整，技術才能落地，避免「為了AI而AI」。",
+                            terms: [{t:"Organizational Inertia", d:"組織慣性：維持現狀的阻力。"}],
+                            cards: [{f:"最難改變的是？", b:"People (人)"}, {f:"3P 是哪三個？", b:"Position, Process, People"}],
+                            quiz: [{q:"哪項不是3P？", options:["Product","People","Process"], ans:0}, {q:"變革最大敵人？", options:["資金","慣性","硬體"], ans:1}]
                         },
                         dx: {
-                            title: "數位轉型 (DX) 的層次",
-                            text: "數位轉型並非一蹴可幾。層次分為：1. Digitization (數位化 - 轉檔/紀錄)、2. Digitalization (數位優化 - 流程效率)、3. Digital Transformation (數位轉型 - 商模改變)。工業 4.0 則是強調虛實整合系統 (CPS)。",
-                            terms: [
-                                { t: "Digitization", d: "數位化，將類比資訊轉為數位格式 (如：紙本轉PDF)。" },
-                                { t: "CPS", d: "Cyber-Physical Systems，虛實整合系統，工業4.0的核心。" }
-                            ],
-                            cards: [
-                                { f: "將紙本報表輸入 Excel 是？", b: "Digitization (數位化)。" },
-                                { f: "利用數據預測維修時間是？", b: "Digitalization (數位優化)。" }
-                            ],
-                            quiz: [
-                                { q: "將紙本轉為數位檔案稱為？", options: ["數位轉型", "數位化", "數位優化", "工業 4.0"], ans: 1 },
-                                { q: "利用數據改善現有流程效率稱為？", options: ["數位化", "數位優化", "人工智慧", "大數據"], ans: 1 },
-                                { q: "工業 4.0 的核心概念是？", options: ["CPS 虛實整合", "大量生產", "手工藝", "蒸汽機"], ans: 0 },
-                                { q: "商業模式的根本改變屬於？", options: ["Digitization", "Digitalization", "DX", "None"], ans: 2 }
-                            ]
+                            title: "數位轉型層次",
+                            text: "1. Digitization (數位化/轉檔); 2. Digitalization (數位優化/流程); 3. Digital Transformation (數位轉型/商模)。工業 4.0 核心為 CPS 虛實整合。",
+                            terms: [{t:"CPS", d:"Cyber-Physical Systems 虛實整合系統"}],
+                            cards: [{f:"紙本轉 Excel？", b:"Digitization"}, {f:"數據預測維修？", b:"Digitalization"}],
+                            quiz: [{q:"商模改變屬於？", options:["數位化","數位轉型","數位優化"], ans:1}, {q:"工業4.0核心？", options:["CPS","IoT","AI"], ans:0}]
                         },
                         ai: {
-                            title: "AI 的定義、機會與威脅",
-                            text: "AI 是模擬人類智慧的系統。現代 AI 包含：Generative AI (生成式 - 創造內容)、Agentic AI (代理人 - 自主決策與行動)、Physical AI (實體 AI - 機器人)。機會在於效率與創新，威脅則包含隱私、偏見與工作取代。",
-                            terms: [
-                                { t: "Generative AI", d: "生成式 AI，能創造新內容 (文字、圖、程式碼) 的模型。" },
-                                { t: "Agentic AI", d: "代理人 AI，具備目標導向、能自主採取行動的 AI 系統。" }
-                            ],
-                            cards: [
-                                { f: "ChatGPT 屬於哪種 AI？", b: "Generative AI (生成式 AI)。" },
-                                { f: "能自主操作機械手臂的 AI？", b: "Physical AI (實體 AI)。" }
-                            ],
-                            quiz: [
-                                { q: "AI that sets goals and acts autonomously?", options: ["Chatbot", "Agentic AI", "Generative AI", "Excel"], ans: 1 },
-                                { q: "Strength of Generative AI?", options: ["Logic", "Content Creation", "Physical Labor", "Storage"], ans: 1 },
-                                { q: "Concept of AI as Co-pilot?", options: ["Augmented Intelligence", "AGI", "Automation", "Autopilot"], ans: 0 },
-                                { q: "Potential risk of AI?", options: ["Efficiency", "Lower Cost", "Algorithmic Bias", "24/7 Work"], ans: 2 }
-                            ]
+                            title: "AI 定義與分類",
+                            text: "AI 是擴增智慧。分類：Generative AI (生成內容)、Agentic AI (自主決策代理人)、Physical AI (機器人)。機會：效率；威脅：偏見、隱私。",
+                            terms: [{t:"Agentic AI", d:"能自主設定目標並行動的 AI 代理人"}],
+                            cards: [{f:"ChatGPT 是？", b:"Generative AI"}, {f:"機械手臂 AI？", b:"Physical AI"}],
+                            quiz: [{q:"自主決策 AI？", options:["Chatbot","Agentic AI","GenAI"], ans:1}, {q:"AI 角色？", options:["取代人類","副駕駛","裝飾品"], ans:1}]
+                        },
+                        method: {
+                            title: "AI 實施方法論",
+                            text: "建議採用 CRISP-DM 流程：商業理解 -> 數據理解 -> 數據準備 -> 模型建立 -> 評估 -> 部署。並結合 Agile 敏捷開發，快速迭代驗證。",
+                            terms: [{t:"CRISP-DM", d:"跨行業數據挖掘標準流程"}, {t:"Agile", d:"敏捷開發，強調快速迭代與回饋"}],
+                            cards: [{f:"第一步是？", b:"商業理解 (Business Understanding)"}, {f:"數據準備佔比？", b:"通常佔 70-80% 時間"}],
+                            quiz: [{q:"CRISP-DM 第一步？", options:["數據理解","商業理解","模型建立"], ans:1}, {q:"敏捷開發核心？", options:["完整文件","快速迭代","嚴格合約"], ans:1}]
+                        },
+                        data: {
+                            title: "數據策略與治理",
+                            text: "數據是 AI 的燃料。需建立「單一數據源」(Single Source of Truth)，打破部門孤島 (Silos)。重視數據品質，避免 GIGO (垃圾進垃圾出)。",
+                            terms: [{t:"Data Silo", d:"數據孤島，部門間數據不流通"}, {t:"GIGO", d:"Garbage In, Garbage Out"}],
+                            cards: [{f:"GIGO 意思？", b:"垃圾進，垃圾出"}, {f:"數據整合目標？", b:"單一數據源 (SSOT)"}],
+                            quiz: [{q:"數據品質差導致？", options:["GIGO","效率高","成本低"], ans:0}, {q:"解決孤島的方法？", options:["加密","建立單一數據源","各管各的"], ans:1}]
+                        },
+                        roi: {
+                            title: "ROI 與 KPI 設定",
+                            text: "ROI 不僅看財務回報，也包含無形效益 (軟性價值)。KPI 應包含：效率指標 (時間/成本)、品質指標 (良率/準確度)、滿意度指標。",
+                            terms: [{t:"TCO", d:"總體擁有成本"}, {t:"Soft Benefits", d:"無形效益，如員工滿意度、品牌形象"}],
+                            cards: [{f:"ROI 全名？", b:"Return on Investment"}, {f:"軟性效益例子？", b:"決策速度、員工滿意度"}],
+                            quiz: [{q:"TCO 代表？", options:["總營收","總擁有成本","技術長"], ans:1}, {q:"良率屬於？", options:["效率指標","品質指標","財務指標"], ans:1}]
+                        },
+                        tactic: {
+                            title: "變革管理戰術",
+                            text: "採用 Kotter 八步驟或 ADKAR 模型。戰術：1. 建立急迫感 2. 溝通願景 3. 賦能員工 4. 創造短期戰果 (Quick Wins) 以增強信心。",
+                            terms: [{t:"Quick Wins", d:"速贏項目，能快速展現成效的計畫"}, {t:"ADKAR", d:"Awareness, Desire, Knowledge, Ability, Reinforcement"}],
+                            cards: [{f:"克服抗拒最好方法？", b:"溝通與賦能"}, {f:"初期專案重點？", b:"建立 Quick Wins"}],
+                            quiz: [{q:"增強信心的戰術？", options:["畫大餅","創造短期戰果","增加工時"], ans:1}, {q:"ADKAR 的 A 代表？", options:["Awareness","Action","AI"], ans:0}]
                         }
                     }
                 },
-                industry: {
-                    title: "選擇您的產業",
-                    machining: "機械加工業 (離散製造)",
-                    retail: "食品零售業 (連鎖服務)"
-                },
-                consulting: {
-                    title: "AI 轉型顧問諮詢",
-                    welcome: "請先選擇產業，我將根據您的需求提供建議。",
-                    inputPlaceholder: "請輸入您的問題...",
-                    presets: ["預算如何分配？", "員工抗拒怎麼辦？", "第一步該做什麼？"]
+                combined: {
+                    title: "產業選擇與 AI 顧問諮詢",
+                    selectPrompt: "請選擇您的產業以啟動專屬 AI 顧問：",
+                    chatHeader: "AI 轉型顧問",
+                    inputPlaceholder: "詢問關於該產業的轉型策略...",
+                    industries: {
+                        machining: { name: "機械加工業", desc: "離散製造、排程優化", icon: "Settings" },
+                        retail: { name: "食品零售業", desc: "連鎖服務、需求預測", icon: "User" },
+                        healthcare: { name: "智慧醫療", desc: "病患流動、輔助診斷", icon: "Stethoscope" },
+                        agriculture: { name: "精準農業", desc: "產量預測、病蟲害", icon: "Sprout" }
+                    },
+                    presets: {
+                        machining: ["如何改善報價準確度？", "排程混亂怎麼辦？", "數據如何蒐集？"],
+                        retail: ["如何減少報廢？", "會員行銷策略？", "動態定價是什麼？"],
+                        healthcare: ["如何縮短候診時間？", "AI 輔助診斷應用？", "病歷數據隱私？"],
+                        agriculture: ["如何預測產量？", "農藥減量策略？", "IoT 監控應用？"]
+                    }
                 },
                 planning: {
                     title: "策略規劃書",
-                    headers: ["階段", "時程", "行動方案", "KPI", "資源"]
+                    headers: ["階段", "時程", "行動方案", "KPI", "資源配置 (40-30-20-10)"]
                 },
                 history: {
-                    title: "學習/診斷/規劃 歷程",
+                    title: "歷程紀錄",
                     headers: ["時間", "類別", "詳細內容"],
-                    types: {
-                        nav: "導覽",
-                        quiz: "測驗",
-                        chat: "諮詢",
-                        select: "選擇"
-                    },
-                    exportBtn: "匯出歷程紀錄 (JSON)"
+                    exportBtn: "匯出歷程 (JSON)"
                 }
             },
             EN: {
@@ -281,10 +265,9 @@
                 nav: {
                     overview: "A. Overview",
                     learning: "B. Learning Area",
-                    industry: "C. Industry",
-                    consulting: "D. Consulting",
+                    combined: "C. Industry & Consulting",
                     planning: "E. Planning",
-                    history: "F. History Log"
+                    history: "F. History"
                 },
                 common: {
                     backTop: "Back to Top",
@@ -295,144 +278,150 @@
                     correct: "Correct!",
                     wrong: "Incorrect",
                     score: "Score",
-                    voice: "Audio Guide"
+                    voice: "Audio Guide",
+                    progress: "Progress",
+                    badges: "Badges"
                 },
                 overview: {
                     title: "SME AI Adoption & Org Change Strategy",
                     subtitle: "Data-Driven Operational Transformation",
                     core: "Core Philosophy: Augmented Intelligence",
-                    desc: "This plan aims to establish a new management system, shifting from 'experience-based' to 'data-driven' operations. AI is positioned not to replace humans, but as a 'Co-pilot' to assist decision-making.",
-                    author: "Prof. Shihmin Lo"
+                    desc: "This plan aims to establish a new management system, shifting from 'experience-based' to 'data-driven' operations. AI acts as a 'Co-pilot' to assist decision-making, not to replace humans.",
+                    author: "Prof. Shihmin Lo",
+                    metrics: [
+                        { label: "Efficiency Gain", val: "35%", icon: "TrendingUp" },
+                        { label: "Success Rate", val: "80%+", icon: "CheckCircle" },
+                        { label: "Adaptation Time", val: "3-6 Mo", icon: "Clock" }
+                    ]
                 },
                 learning: {
                     topics: [
-                        { id: 'sme', title: "1. SME Characteristics & Status" },
-                        { id: 'change', title: "2. Org Change & Inertia (3P)" },
-                        { id: 'dx', title: "3. Levels of Digital Transformation" },
-                        { id: 'ai', title: "4. AI Definitions & Types" }
+                        { id: 'sme', title: "1. SME Characteristics" },
+                        { id: 'change', title: "2. 3P Org Change" },
+                        { id: 'dx', title: "3. Digital Trans. (DX)" },
+                        { id: 'ai', title: "4. AI Definitions" },
+                        { id: 'method', title: "5. Methodology" },
+                        { id: 'data', title: "6. Data Strategy" },
+                        { id: 'roi', title: "7. ROI & KPI" },
+                        { id: 'tactic', title: "8. Change Tactics" }
                     ],
                     content: {
                         sme: {
                             title: "SME Definition & Advantages",
-                            text: "SMEs make up 98% of Taiwan's businesses, acting as 'Hidden Champions'. Their strength lies in flexibility, but they face risks like talent shortages and succession gaps. AI adoption should follow a 'Quick Win' strategy, focusing on specific pain points.",
-                            terms: [
-                                { t: "Hidden Champions", d: "Companies with high market share in niche markets but low public visibility." },
-                                { t: "Succession Gap", d: "Risk of knowledge loss when senior masters retire before transferring skills." }
-                            ],
-                            cards: [
-                                { f: "Biggest advantage of SMEs?", b: "Flexibility and fast decision-making." },
-                                { f: "Common barrier to digitization?", b: "Budget, Talent, and Resistance to Change." }
-                            ],
-                            quiz: [
-                                { q: "Approximate percentage of SMEs in Taiwan?", options: ["50%", "70%", "98%", "30%"], ans: 2 },
-                                { q: "Which is NOT a typical SME advantage?", options: ["Flexibility", "Massive Capital", "Speed", "Customization"], ans: 1 },
-                                { q: "What is the priority for SME AI adoption?", options: ["Expensive Hardware", "Solving Pain Points", "Full Automation", "Big Data Centers"], ans: 1 },
-                                { q: "What are 'Hidden Champions'?", options: ["Small startups", "Famous brands", "Niche market leaders", "Failing companies"], ans: 2 }
-                            ]
+                            text: "SMEs make up 98% of Taiwan's businesses (Hidden Champions). Pros: Flexibility, Speed. Cons: Resources, Talent gap. Strategy: 'Quick Wins' focusing on specific pain points.",
+                            terms: [{t:"Hidden Champions", d:"Market leaders in niche segments with low visibility."}],
+                            cards: [{f:"Biggest SME advantage?", b:"Flexibility & Speed"}, {f:"Common barrier?", b:"Budget, Talent, Inertia"}],
+                            quiz: [{q:"SME % in Taiwan?", options:["50%","98%","30%"], ans:1}, {q:"Priority strategy?", options:["Full Automation","Solve Pain Points","Buy Hardware"], ans:1}]
                         },
                         change: {
-                            title: "Organizational Change & 3P Model",
-                            text: "Change is necessary for adaptation. The enemy is 'Organizational Inertia'. We use the 3P Model: Position (Strategy), Process (Workflow), People (Culture). All three must align for technology to succeed.",
-                            terms: [
-                                { t: "Organizational Inertia", d: "The tendency of an organization to continue on its current trajectory." },
-                                { t: "3P Model", d: "Position, Process, People." }
-                            ],
-                            cards: [
-                                { f: "Hardest element to change?", b: "People (Mindset & Culture)." },
-                                { f: "What does Position represent?", b: "Strategic goals and market positioning." }
-                            ],
-                            quiz: [
-                                { q: "Which is NOT part of the 3P Model?", options: ["Position", "Process", "Product", "People"], ans: 2 },
-                                { q: "Common cause of failure in change?", options: ["Tech complexity", "Lack of funds", "Org Inertia", "Old hardware"], ans: 2 },
-                                { q: "AI adoption involves which P?", options: ["Process only", "Position only", "All 3 Ps", "People only"], ans: 2 },
-                                { q: "Best time to overcome inertia?", options: ["During Crisis", "At peak profit", "Anytime", "After retirement"], ans: 0 }
-                            ]
+                            title: "Org Change & 3P Model",
+                            text: "Overcoming 'Organizational Inertia' is key. 3P Model: Position, Process, People. All three must align for tech adoption to succeed.",
+                            terms: [{t:"Organizational Inertia", d:"Resistance to change."}],
+                            cards: [{f:"Hardest to change?", b:"People"}, {f:"What are the 3Ps?", b:"Position, Process, People"}],
+                            quiz: [{q:"Not a P?", options:["Product","People","Process"], ans:0}, {q:"Biggest enemy?", options:["Money","Inertia","Hardware"], ans:1}]
                         },
                         dx: {
-                            title: "Levels of Digital Transformation (DX)",
-                            text: "DX is a journey: 1. Digitization (Analog to Digital), 2. Digitalization (Process Optimization), 3. Digital Transformation (Business Model Change). Industry 4.0 focuses on Cyber-Physical Systems (CPS).",
-                            terms: [
-                                { t: "Digitization", d: "Converting information from analog to digital formats." },
-                                { t: "CPS", d: "Cyber-Physical Systems, the core of Industry 4.0." }
-                            ],
-                            cards: [
-                                { f: "Typing paper reports into Excel is?", b: "Digitization." },
-                                { f: "Using data to predict maintenance is?", b: "Digitalization." }
-                            ],
-                            quiz: [
-                                { q: "Converting paper to PDF is?", options: ["DX", "Digitization", "Digitalization", "Ind 4.0"], ans: 1 },
-                                { q: "Improving process efficiency with data is?", options: ["Digitization", "Digitalization", "AI", "Big Data"], ans: 1 },
-                                { q: "Core concept of Industry 4.0?", options: ["CPS", "Mass Production", "Craftsmanship", "Steam Power"], ans: 0 },
-                                { q: "Fundamental change in Business Model is?", options: ["Digitization", "Digitalization", "DX", "None"], ans: 2 }
-                            ]
+                            title: "Levels of DX",
+                            text: "1. Digitization (Analog to Digital); 2. Digitalization (Process Optimization); 3. Digital Transformation (Business Model). Industry 4.0 core is CPS.",
+                            terms: [{t:"CPS", d:"Cyber-Physical Systems"}],
+                            cards: [{f:"Paper to Excel?", b:"Digitization"}, {f:"Predictive Maint?", b:"Digitalization"}],
+                            quiz: [{q:"Business Model change?", options:["Digitization","DX","Digitalization"], ans:1}, {q:"Ind 4.0 Core?", options:["CPS","IoT","AI"], ans:0}]
                         },
                         ai: {
-                            title: "AI: Definitions & Types",
-                            text: "AI simulates human intelligence. Modern types: Generative AI (Creates content), Agentic AI (Autonomous goals/actions), Physical AI (Robotics). Opportunities: Efficiency. Threats: Bias, Privacy.",
-                            terms: [
-                                { t: "Generative AI", d: "AI capable of generating new content (text, images, code)." },
-                                { t: "Agentic AI", d: "AI agents that can pursue goals and take actions autonomously." }
-                            ],
-                            cards: [
-                                { f: "What type is ChatGPT?", b: "Generative AI." },
-                                { f: "AI that controls a robot arm?", b: "Physical AI." }
-                            ],
-                            quiz: [
-                                { q: "AI that sets goals and acts autonomously?", options: ["Chatbot", "Agentic AI", "Generative AI", "Excel"], ans: 1 },
-                                { q: "Strength of Generative AI?", options: ["Logic", "Content Creation", "Physical Labor", "Storage"], ans: 1 },
-                                { q: "Concept of AI as Co-pilot?", options: ["Augmented Intelligence", "AGI", "Automation", "Autopilot"], ans: 0 },
-                                { q: "Potential risk of AI?", options: ["Efficiency", "Lower Cost", "Algorithmic Bias", "24/7 Work"], ans: 2 }
-                            ]
+                            title: "AI Definitions & Types",
+                            text: "AI is Augmented Intelligence. Types: Generative AI (Content), Agentic AI (Autonomous Agents), Physical AI (Robots). Opportunity: Efficiency; Threat: Bias.",
+                            terms: [{t:"Agentic AI", d:"AI agents that pursue goals autonomously."}],
+                            cards: [{f:"ChatGPT is?", b:"Generative AI"}, {f:"Robot Arm AI?", b:"Physical AI"}],
+                            quiz: [{q:"Autonomous AI?", options:["Chatbot","Agentic AI","GenAI"], ans:1}, {q:"AI Role?", options:["Replace Human","Co-pilot","Toy"], ans:1}]
+                        },
+                        method: {
+                            title: "Implementation Methodology",
+                            text: "Use CRISP-DM: Business Understanding -> Data Understanding -> Prep -> Modeling -> Eval -> Deploy. Combine with Agile for fast iterations.",
+                            terms: [{t:"CRISP-DM", d:"Standard process for data mining."}, {t:"Agile", d:"Iterative development approach."}],
+                            cards: [{f:"First step?", b:"Business Understanding"}, {f:"Time spent on Data Prep?", b:"70-80%"}],
+                            quiz: [{q:"First step of CRISP-DM?", options:["Data","Business","Model"], ans:1}, {q:"Agile core?", options:["Docs","Iterations","Contracts"], ans:1}]
+                        },
+                        data: {
+                            title: "Data Strategy & Governance",
+                            text: "Data is fuel. Establish a 'Single Source of Truth' (SSOT) to break Data Silos. Focus on quality to avoid GIGO (Garbage In, Garbage Out).",
+                            terms: [{t:"Data Silo", d:"Isolated data pockets."}, {t:"GIGO", d:"Garbage In, Garbage Out"}],
+                            cards: [{f:"GIGO means?", b:"Garbage In, Garbage Out"}, {f:"Integration Goal?", b:"Single Source of Truth"}],
+                            quiz: [{q:"Poor data leads to?", options:["GIGO","Success","Savings"], ans:0}, {q:"Solving Silos?", options:["Encryption","SSOT","Isolation"], ans:1}]
+                        },
+                        roi: {
+                            title: "ROI & KPI",
+                            text: "ROI includes financial and Soft Benefits (intangibles). KPIs: Efficiency (Time/Cost), Quality (Accuracy/Yield), Satisfaction.",
+                            terms: [{t:"TCO", d:"Total Cost of Ownership"}, {t:"Soft Benefits", d:"Intangibles like morale, brand."}],
+                            cards: [{f:"ROI stands for?", b:"Return on Investment"}, {f:"Soft benefit example?", b:"Decision Speed, Morale"}],
+                            quiz: [{q:"TCO means?", options:["Revenue","Total Cost","CTO"], ans:1}, {q:"Yield rate is?", options:["Efficiency","Quality","Financial"], ans:1}]
+                        },
+                        tactic: {
+                            title: "Change Management Tactics",
+                            text: "Use Kotter's 8 Steps or ADKAR. Tactics: 1. Urgency 2. Vision 3. Empowerment 4. Create Quick Wins to build confidence.",
+                            terms: [{t:"Quick Wins", d:"Early successes to validate project."}, {t:"ADKAR", d:"Awareness, Desire, Knowledge, Ability, Reinforcement"}],
+                            cards: [{f:"Best way to handle resistance?", b:"Communication & Empowerment"}, {f:"Early project focus?", b:"Quick Wins"}],
+                            quiz: [{q:"Tactic for confidence?", options:["Promises","Quick Wins","More Work"], ans:1}, {q:"'A' in ADKAR?", options:["Awareness","Action","AI"], ans:0}]
                         }
                     }
                 },
-                industry: {
-                    title: "Select Industry",
-                    machining: "Machining (Discrete Mfg)",
-                    retail: "Food Retail (Chain Service)"
-                },
-                consulting: {
-                    title: "AI Transformation Consultant",
-                    welcome: "Please select an industry first.",
-                    inputPlaceholder: "Type your question...",
-                    presets: ["How to allocate budget?", "How to handle resistance?", "What is the first step?"]
+                combined: {
+                    title: "Industry & AI Consulting",
+                    selectPrompt: "Select your industry to activate the AI Consultant:",
+                    chatHeader: "AI Consultant",
+                    inputPlaceholder: "Ask about transformation strategies...",
+                    industries: {
+                        machining: { name: "Machining", desc: "Discrete Mfg, Scheduling", icon: "Settings" },
+                        retail: { name: "Food Retail", desc: "Chain Svc, Demand Pred", icon: "User" },
+                        healthcare: { name: "Healthcare", desc: "Patient Flow, Diagnosis", icon: "Stethoscope" },
+                        agriculture: { name: "Agriculture", desc: "Yield Pred, IoT", icon: "Sprout" }
+                    },
+                    presets: {
+                        machining: ["Improve quote accuracy?", "Fix scheduling chaos?", "How to collect data?"],
+                        retail: ["Reduce waste?", "Member marketing?", "What is Dynamic Pricing?"],
+                        healthcare: ["Reduce wait times?", "AI diagnosis uses?", "Patient data privacy?"],
+                        agriculture: ["Predict crop yield?", "Reduce pesticides?", "IoT monitoring?"]
+                    }
                 },
                 planning: {
                     title: "Strategic Plan",
-                    headers: ["Phase", "Timeline", "Action", "KPI", "Resource"]
+                    headers: ["Phase", "Timeline", "Action Plan", "KPI", "Resources (40-30-20-10)"]
                 },
                 history: {
-                    title: "Learning / Diagnosis / Planning History",
+                    title: "History Log",
                     headers: ["Time", "Category", "Detail"],
-                    types: {
-                        nav: "Navigate",
-                        quiz: "Quiz",
-                        chat: "Consult",
-                        select: "Select"
-                    },
-                    exportBtn: "Export History (JSON)"
+                    exportBtn: "Export JSON"
                 }
             }
         };
 
         // --- COMPONENTS ---
 
+        const ProgressBar = ({ completed, total, text }) => (
+            <div className="w-full bg-gray-200 rounded-full h-4 dark:bg-gray-700 mb-4 overflow-hidden relative group">
+                <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-4 rounded-full transition-all duration-1000 ease-out" style={{ width: `${(completed/total)*100}%` }}></div>
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:opacity-100 opacity-0 transition-opacity">
+                    {Math.round((completed/total)*100)}% {text}
+                </span>
+            </div>
+        );
+
+        const Badge = ({ unlocked, icon, label }) => (
+            <div className={`flex flex-col items-center p-2 rounded-lg transition-all ${unlocked ? 'bg-yellow-100 text-yellow-800 scale-110' : 'bg-gray-100 text-gray-400 grayscale'}`}>
+                <SafeIcon name={icon} size={24} className={unlocked ? "animate-bounce" : ""} />
+                <span className="text-[10px] font-bold mt-1">{label}</span>
+            </div>
+        );
+
         const FlipCard = ({ front, back }) => {
             const [flipped, setFlipped] = useState(false);
             return (
-                <div 
-                    className="group w-full h-40 [perspective:1000px] cursor-pointer"
-                    onClick={() => setFlipped(!flipped)}
-                >
+                <div className="group w-full h-32 [perspective:1000px] cursor-pointer" onClick={() => setFlipped(!flipped)}>
                     <div className={`relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] ${flipped ? '[transform:rotateY(180deg)]' : ''}`}>
-                        {/* Front */}
-                        <div className="absolute inset-0 bg-white dark:bg-slate-800 border border-emerald-500/30 rounded-lg p-4 flex items-center justify-center text-center shadow-md [backface-visibility:hidden]">
-                            <p className="font-bold text-lg text-emerald-800 dark:text-emerald-400">{front}</p>
-                            <div className="absolute bottom-2 right-2 text-xs text-gray-400">Click to flip</div>
+                        <div className="absolute inset-0 bg-white dark:bg-slate-800 border-2 border-emerald-100 dark:border-slate-700 rounded-xl p-4 flex items-center justify-center text-center shadow-sm [backface-visibility:hidden] hover:border-emerald-400 transition-colors">
+                            <p className="font-bold text-emerald-800 dark:text-emerald-400 text-sm">{front}</p>
                         </div>
-                        {/* Back */}
-                        <div className="absolute inset-0 bg-emerald-700 text-white rounded-lg p-4 flex items-center justify-center text-center shadow-md [transform:rotateY(180deg)] [backface-visibility:hidden]">
-                            <p className="font-medium text-lg">{back}</p>
+                        <div className="absolute inset-0 bg-emerald-600 text-white rounded-xl p-4 flex items-center justify-center text-center shadow-md [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                            <p className="font-medium text-sm">{back}</p>
                         </div>
                     </div>
                 </div>
@@ -461,68 +450,49 @@
                     setCurrent(current + 1);
                 } else {
                     setShowResult(true);
-                    onComplete(score + (isCorrect ? 0 : 0)); // log final score
+                    onComplete(score + (isCorrect ? 0 : 0));
                 }
-            };
-
-            const reset = () => {
-                setCurrent(0);
-                setScore(0);
-                setShowResult(false);
-                setSelected(null);
-                setIsCorrect(null);
             };
 
             if (showResult) {
                 return (
-                    <div className="bg-emerald-50 dark:bg-slate-800 p-6 rounded-lg text-center border border-emerald-200 dark:border-emerald-900">
-                        <h4 className="text-xl font-bold mb-2">{texts.score}: {score} / {questions.length}</h4>
-                        <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-                            <div className="bg-emerald-600 h-2.5 rounded-full" style={{ width: `${(score/questions.length)*100}%` }}></div>
-                        </div>
-                        <button onClick={reset} className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition flex items-center justify-center gap-2 mx-auto">
-                            <SafeIcon name="RefreshCw" size={16} /> {texts.retry}
+                    <div className="bg-emerald-50 dark:bg-slate-800 p-4 rounded-xl text-center border border-emerald-200 dark:border-emerald-900 animate-fade-in">
+                        <h4 className="font-bold mb-2 text-emerald-800 dark:text-emerald-400">{texts.score}: {score} / {questions.length}</h4>
+                        <ProgressBar completed={score} total={questions.length} text="" />
+                        <button onClick={() => { setCurrent(0); setScore(0); setShowResult(false); setSelected(null); }} className="px-3 py-1 bg-emerald-600 text-white rounded hover:bg-emerald-700 text-xs flex items-center justify-center gap-1 mx-auto">
+                            <SafeIcon name="RefreshCw" size={12} /> {texts.retry}
                         </button>
                     </div>
                 );
             }
 
             const q = questions[current];
-
             return (
-                <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700">
-                    <div className="flex justify-between text-xs text-gray-500 mb-4">
-                        <span>Question {current + 1} / {questions.length}</span>
-                        <span>Score: {score}</span>
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
+                    <div className="flex justify-between text-[10px] text-gray-500 mb-2">
+                        <span>Q {current + 1} / {questions.length}</span>
+                        <span>{texts.score}: {score}</span>
                     </div>
-                    <h4 className="text-lg font-bold mb-4">{q.q}</h4>
+                    <h4 className="font-bold mb-3 text-sm">{q.q}</h4>
                     <div className="space-y-2">
                         {q.options.map((opt, idx) => {
-                            let bgClass = "bg-gray-100 dark:bg-slate-700 hover:bg-emerald-50 dark:hover:bg-slate-600";
+                            let bgClass = "bg-gray-50 dark:bg-slate-700 hover:bg-emerald-50 dark:hover:bg-slate-600";
                             if (selected !== null) {
-                                if (idx === q.ans) bgClass = "bg-emerald-500 text-white"; // Correct
-                                else if (idx === selected) bgClass = "bg-red-500 text-white"; // Wrong
-                                else bgClass = "opacity-50";
+                                if (idx === q.ans) bgClass = "bg-emerald-500 text-white";
+                                else if (idx === selected) bgClass = "bg-red-500 text-white";
+                                else bgClass = "opacity-30";
                             }
                             return (
-                                <button 
-                                    key={idx}
-                                    onClick={() => handleAnswer(idx)}
-                                    className={`w-full p-3 text-left rounded transition ${bgClass}`}
-                                    disabled={selected !== null}
-                                >
+                                <button key={idx} onClick={() => handleAnswer(idx)} className={`w-full p-2 text-left rounded text-xs transition ${bgClass}`} disabled={selected !== null}>
                                     {opt}
                                 </button>
                             );
                         })}
                     </div>
                     {selected !== null && (
-                        <div className="mt-4 flex justify-between items-center">
-                            <span className={`font-bold ${isCorrect ? 'text-emerald-600' : 'text-red-500'}`}>
-                                {isCorrect ? texts.correct : texts.wrong}
-                            </span>
-                            <button onClick={handleNext} className="px-4 py-2 bg-slate-800 text-white rounded text-sm hover:bg-slate-700">
-                                {texts.next} <SafeIcon name="ArrowRight" className="inline w-4 h-4" />
+                        <div className="mt-3 flex justify-end">
+                            <button onClick={handleNext} className="px-3 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700 flex items-center gap-1">
+                                {texts.next} <SafeIcon name="ArrowRight" size={12} />
                             </button>
                         </div>
                     )}
@@ -531,9 +501,8 @@
         };
 
         const MainApp = () => {
-            // --- STATE ---
-            const [lang, setLang] = useState('EN'); // Default EN
-            const [darkMode, setDarkMode] = useState(true); // Default Dark
+            const [lang, setLang] = useState('EN'); 
+            const [darkMode, setDarkMode] = useState(true);
             const [activeSection, setActiveSection] = useState('overview');
             const [isMenuOpen, setIsMenuOpen] = useState(false);
             const [selectedIndustry, setSelectedIndustry] = useState(null);
@@ -542,19 +511,17 @@
             const [chatHistory, setChatHistory] = useState([]);
             const [chatInput, setChatInput] = useState("");
             const [isSpeaking, setIsSpeaking] = useState(false);
+            const [completedTopics, setCompletedTopics] = useState([]);
 
             const t = CONTENT[lang];
 
-            // --- EFFECTS ---
             useEffect(() => {
                 if (darkMode) document.documentElement.classList.add('dark');
                 else document.documentElement.classList.remove('dark');
             }, [darkMode]);
 
-            // --- ACTIONS ---
             const logAction = (type, detail) => {
-                const newEntry = { time: new Date().toLocaleTimeString(), type, detail };
-                setHistory(prev => [newEntry, ...prev]);
+                setHistory(prev => [{ time: new Date().toLocaleTimeString(), type, detail }, ...prev]);
             };
 
             const switchSection = (id) => {
@@ -562,52 +529,14 @@
                 setIsMenuOpen(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 logAction('nav', `Viewed ${id}`);
-                // Stop speech on nav change
                 window.speechSynthesis.cancel();
                 setIsSpeaking(false);
             };
 
-            const handleTTS = (text) => {
-                if (isSpeaking) {
-                    window.speechSynthesis.cancel();
-                    setIsSpeaking(false);
-                    return;
+            const handleTopicComplete = (topicId) => {
+                if (!completedTopics.includes(topicId)) {
+                    setCompletedTopics([...completedTopics, topicId]);
                 }
-
-                const utterance = new SpeechSynthesisUtterance(text);
-                const voices = window.speechSynthesis.getVoices();
-                
-                // Voice Selection Logic
-                let voice = null;
-                if (lang === 'EN') {
-                    // Try to find UK Male (Google UK English Male or en-GB)
-                    voice = voices.find(v => v.lang === 'en-GB' && v.name.includes('Male')) || 
-                            voices.find(v => v.lang === 'en-GB') ||
-                            voices.find(v => v.lang.startsWith('en'));
-                } else {
-                    // Try to find TW/CN (Google 國語 or zh-TW)
-                    voice = voices.find(v => v.lang === 'zh-TW') || 
-                            voices.find(v => v.lang.startsWith('zh'));
-                }
-                
-                if (voice) utterance.voice = voice;
-                utterance.lang = lang === 'EN' ? 'en-GB' : 'zh-TW';
-                utterance.rate = 1.0;
-
-                utterance.onend = () => setIsSpeaking(false);
-                
-                window.speechSynthesis.speak(utterance);
-                setIsSpeaking(true);
-            };
-
-            const downloadHistory = () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
-                const downloadAnchorNode = document.createElement('a');
-                downloadAnchorNode.setAttribute("href", dataStr);
-                downloadAnchorNode.setAttribute("download", "user_history.json");
-                document.body.appendChild(downloadAnchorNode);
-                downloadAnchorNode.click();
-                downloadAnchorNode.remove();
             };
 
             const handleChatSubmit = (e) => {
@@ -616,43 +545,78 @@
                 const query = chatInput;
                 setChatInput("");
                 setChatHistory(prev => [...prev, { role: 'user', text: query }]);
-                logAction('chat', query);
+                logAction('chat', `[${selectedIndustry}] ${query}`);
                 
-                // RAG Simulation
                 setTimeout(() => {
                     let reply = "";
+                    const lq = query.toLowerCase();
+                    // Richer Logic
                     if (!selectedIndustry) {
-                        reply = t.consulting.welcome;
+                        reply = "Please select an industry first.";
+                    } else if (lq.includes("budget") || lq.includes("預算") || lq.includes("resource") || lq.includes("40-30")) {
+                        reply = lang === 'TC' ? 
+                            "根據 40-30-20-10 法則：40% 用於數據工程(最重要但常被忽略)，30% 軟體設施，20% 變革管理(人員培訓)，10% 維運模型。" : 
+                            "According to the 40-30-20-10 rule: 40% Data Engineering, 30% Software, 20% Change Mgmt, 10% Maintenance.";
+                    } else if (lq.includes("step") || lq.includes("第一步") || lq.includes("start")) {
+                        reply = lang === 'TC' ? 
+                            "建議從「單一數據源」(SSOT) 開始，並在該產業中找到一個具體的「速贏項目」(Quick Win)，例如機械業的報價查找或零售業的缺貨預測。" : 
+                            "Start with a 'Single Source of Truth' (SSOT) and a 'Quick Win' project, like quote search for machining or stockout prediction for retail.";
+                    } else if (selectedIndustry === 'healthcare' && (lq.includes("privacy") || lq.includes("隱私"))) {
+                         reply = lang === 'TC' ? "在醫療領域，數據隱私(如HIPAA合規)是首要考量。建議採用聯邦學習(Federated Learning)技術，讓數據不出院即可訓練模型。" : "In healthcare, privacy (HIPAA) is paramount. We recommend Federated Learning so data stays on-premise while training models.";
+                    } else if (selectedIndustry === 'agriculture' && (lq.includes("iot") || lq.includes("yield"))) {
+                         reply = lang === 'TC' ? "精準農業依賴 IoT 感測器蒐集微氣候數據。結合歷史產量數據，AI 可預測最佳收成期與病蟲害風險。" : "Precision Ag relies on IoT sensors for micro-climate data. Combined with history, AI predicts harvest windows and pest risks.";
                     } else {
-                        // Keyword matching logic
-                        const lq = query.toLowerCase();
-                        if (lq.includes("budget") || lq.includes("預算")) {
-                            reply = lang === 'TC' ? "建議採 40% 數據工程、30% 軟體、20% 變革管理、10% 維運的比例配置。" : "We recommend the 40-30-20-10 rule: 40% Data Eng, 30% Software, 20% Change Mgmt, 10% Ops.";
-                        } else if (lq.includes("step") || lq.includes("第一步")) {
-                            reply = lang === 'TC' ? "第一步是建立「單一數據源」(Single Source of Truth) 並解決單一痛點以取得速贏。" : "The first step is establishing a 'Single Source of Truth' and achieving a Quick Win.";
-                        } else {
-                            reply = lang === 'TC' ? "這是個好問題。根據您的產業特性，建議參考學習區的「3P 模型」來評估組織現狀。" : "Great question. Based on your industry, I recommend reviewing the '3P Model' in the Learning Area.";
-                        }
+                        reply = lang === 'TC' ? "這是個好問題。建議您參考「變革管理」章節，並確認您的數據品質是否已準備好 (避免 GIGO)。" : "Good question. Please refer to the 'Change Management' section and ensure your data quality is ready (avoid GIGO).";
                     }
                     setChatHistory(prev => [...prev, { role: 'bot', text: reply }]);
                 }, 600);
             };
 
-            // --- RENDERERS ---
+            const handleTTS = (text) => {
+                if (isSpeaking) { window.speechSynthesis.cancel(); setIsSpeaking(false); return; }
+                const u = new SpeechSynthesisUtterance(text);
+                const vs = window.speechSynthesis.getVoices();
+                let v = lang === 'EN' ? (vs.find(x => x.lang==='en-GB') || vs.find(x => x.lang.startsWith('en'))) : (vs.find(x => x.lang==='zh-TW') || vs.find(x => x.lang.startsWith('zh')));
+                if (v) u.voice = v;
+                u.onend = () => setIsSpeaking(false);
+                window.speechSynthesis.speak(u);
+                setIsSpeaking(true);
+            };
+
+            const downloadHistory = () => {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
+                const a = document.createElement('a'); a.href = dataStr; a.download = "history.json"; a.click();
+            };
+
+            // --- Render Sections ---
 
             const renderOverview = () => (
-                <div className="space-y-8 animate-fade-in">
-                    <div className="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg border-l-8 border-emerald-600">
-                        <h1 className="text-4xl font-serif font-bold mb-4">{t.overview.title}</h1>
-                        <h2 className="text-xl text-emerald-600 dark:text-emerald-400 mb-6">{t.overview.subtitle}</h2>
-                        <div className="bg-slate-100 dark:bg-slate-700/50 p-4 rounded-lg mb-6">
-                             <h3 className="flex items-center gap-2 font-bold text-lg mb-2 text-emerald-800 dark:text-emerald-300">
-                                <SafeIcon name="Brain" className="w-5 h-5" /> {t.overview.core}
-                             </h3>
-                             <p className="leading-relaxed">{t.overview.desc}</p>
+                <div className="space-y-8 animate-fade-in pb-8">
+                    {/* Hero */}
+                    <div className="bg-gradient-to-br from-white to-emerald-50 dark:from-slate-800 dark:to-slate-900 p-8 rounded-2xl shadow-xl border-l-8 border-emerald-500 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 animate-pulse-slow"></div>
+                        <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 relative z-10">{t.overview.title}</h1>
+                        <h2 className="text-xl text-emerald-600 dark:text-emerald-400 mb-6 font-medium tracking-wide relative z-10">{t.overview.subtitle}</h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 relative z-10">
+                            {t.overview.metrics.map((m, i) => (
+                                <div key={i} className="bg-white/60 dark:bg-slate-700/60 backdrop-blur p-4 rounded-xl border border-emerald-100 dark:border-slate-600 flex items-center gap-3 transform hover:scale-105 transition-transform duration-300">
+                                    <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full text-emerald-600 dark:text-emerald-300">
+                                        <SafeIcon name={m.icon} size={24} />
+                                    </div>
+                                    <div>
+                                        <div className="text-2xl font-bold text-slate-800 dark:text-white">{m.val}</div>
+                                        <div className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider">{m.label}</div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                        <div className="flex justify-end items-center gap-2 text-sm text-gray-500">
-                            <SafeIcon name="User" size={16} /> {t.overview.author}
+
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm relative z-10">
+                             <h3 className="flex items-center gap-2 font-bold text-lg mb-3 text-emerald-700 dark:text-emerald-300">
+                                <SafeIcon name="Brain" className="w-6 h-6 animate-pulse" /> {t.overview.core}
+                             </h3>
+                             <p className="leading-relaxed text-gray-700 dark:text-gray-300">{t.overview.desc}</p>
                         </div>
                     </div>
                 </div>
@@ -660,75 +624,71 @@
 
             const renderLearning = () => {
                 const topicData = t.learning.content[learningTab];
+                const progress = completedTopics.length;
+                const total = t.learning.topics.length;
+                
                 return (
-                    <div className="space-y-6">
-                        {/* Topic Tabs */}
-                        <div className="flex flex-wrap gap-2 pb-4 border-b border-gray-200 dark:border-slate-700">
+                    <div className="space-y-6 animate-fade-in">
+                        {/* Gamification Bar */}
+                        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex flex-wrap gap-4 items-center justify-between">
+                            <div className="w-full md:w-1/3">
+                                <div className="flex justify-between text-xs font-bold mb-1">
+                                    <span>{t.common.progress}</span>
+                                    <span>{progress} / {total} Topics</span>
+                                </div>
+                                <ProgressBar completed={progress} total={total} text="" />
+                            </div>
+                            <div className="flex gap-2">
+                                <Badge unlocked={progress >= 2} icon="Zap" label="Starter" />
+                                <Badge unlocked={progress >= 5} icon="TrendingUp" label="Pro" />
+                                <Badge unlocked={progress >= 8} icon="Award" label="Master" />
+                            </div>
+                        </div>
+
+                        {/* Topics Nav */}
+                        <div className="flex flex-wrap gap-2 pb-2">
                             {t.learning.topics.map(topic => (
-                                <button 
-                                    key={topic.id}
-                                    onClick={() => { setLearningTab(topic.id); setIsSpeaking(false); window.speechSynthesis.cancel(); }}
-                                    className={`px-4 py-2 rounded-full text-sm font-bold transition ${learningTab === topic.id ? 'bg-emerald-600 text-white' : 'bg-gray-200 dark:bg-slate-800 hover:bg-gray-300 dark:hover:bg-slate-700'}`}
-                                >
+                                <button key={topic.id} onClick={() => { setLearningTab(topic.id); setIsSpeaking(false); window.speechSynthesis.cancel(); }}
+                                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${learningTab === topic.id ? 'bg-emerald-600 text-white shadow-lg scale-105' : 'bg-gray-200 dark:bg-slate-800 hover:bg-gray-300 dark:hover:bg-slate-700'}`}>
                                     {topic.title}
                                 </button>
                             ))}
                         </div>
 
-                        {/* Content Body */}
+                        {/* Content Grid */}
                         <div className="grid lg:grid-cols-3 gap-6">
-                            {/* Main Text & TTS */}
                             <div className="lg:col-span-2 space-y-6">
-                                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border border-gray-100 dark:border-slate-700 relative">
-                                    <button 
-                                        onClick={() => handleTTS(topicData.text)}
-                                        className={`absolute top-4 right-4 p-2 rounded-full transition ${isSpeaking ? 'bg-emerald-100 text-emerald-600 animate-pulse' : 'bg-gray-100 dark:bg-slate-700 text-gray-500 hover:bg-emerald-50'}`}
-                                        title={t.common.voice}
-                                    >
-                                        {isSpeaking ? <SafeIcon name="PauseCircle" /> : <SafeIcon name="Volume2" />}
-                                    </button>
+                                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border border-gray-100 dark:border-slate-700 relative overflow-hidden group">
+                                    <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity">
+                                        <button onClick={() => handleTTS(topicData.text)} className="p-2 bg-gray-100 dark:bg-slate-700 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-colors">
+                                            {isSpeaking ? <SafeIcon name="PauseCircle" /> : <SafeIcon name="Volume2" />}
+                                        </button>
+                                    </div>
                                     <h3 className="text-2xl font-bold font-serif mb-4 text-emerald-800 dark:text-emerald-400">{topicData.title}</h3>
                                     <p className="text-lg leading-loose text-gray-700 dark:text-gray-300">{topicData.text}</p>
                                 </div>
 
-                                {/* Terminology Dropdown */}
                                 <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border border-gray-100 dark:border-slate-700">
                                     <h4 className="font-bold mb-4 flex items-center gap-2"><SafeIcon name="BookOpen" size={20}/> Terminology</h4>
-                                    <div className="space-y-2">
+                                    <div className="grid md:grid-cols-2 gap-4">
                                         {topicData.terms.map((term, i) => (
-                                            <details key={i} className="group bg-gray-50 dark:bg-slate-900 rounded-lg open:ring-2 open:ring-emerald-500/30">
-                                                <summary className="cursor-pointer p-3 font-semibold flex justify-between items-center select-none">
-                                                    {term.t}
-                                                    <SafeIcon name="ChevronDown" className="w-4 h-4 transition-transform group-open:rotate-180" />
-                                                </summary>
-                                                <div className="p-3 pt-0 text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-slate-700 mt-2">
-                                                    {term.d}
-                                                </div>
-                                            </details>
+                                            <div key={i} className="bg-gray-50 dark:bg-slate-900 p-3 rounded-lg border-l-4 border-emerald-400">
+                                                <div className="font-bold text-sm text-slate-800 dark:text-slate-200">{term.t}</div>
+                                                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">{term.d}</div>
+                                            </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Sidebar: Flip Cards & Quiz */}
                             <div className="space-y-6">
-                                {/* Flip Cards */}
                                 <div className="space-y-4">
                                     <h4 className="font-bold flex items-center gap-2 text-emerald-600"><SafeIcon name="RefreshCw" size={18}/> Flash Cards</h4>
-                                    {topicData.cards.map((card, i) => (
-                                        <FlipCard key={i} front={card.f} back={card.b} />
-                                    ))}
+                                    {topicData.cards.map((card, i) => <FlipCard key={i} front={card.f} back={card.b} />)}
                                 </div>
-
-                                {/* Quiz */}
                                 <div>
-                                    <h4 className="font-bold flex items-center gap-2 text-emerald-600 mb-4"><SafeIcon name="CheckCircle" size={18}/> Quick Quiz</h4>
-                                    <QuizModule 
-                                        key={learningTab} // Reset quiz on tab change
-                                        questions={topicData.quiz} 
-                                        texts={t.common}
-                                        onComplete={(s) => logAction('quiz', `${learningTab} Score: ${s}`)}
-                                    />
+                                    <h4 className="font-bold flex items-center gap-2 text-emerald-600 mb-4"><SafeIcon name="CheckCircle" size={18}/> Quiz</h4>
+                                    <QuizModule key={learningTab} questions={topicData.quiz} texts={t.common} onComplete={() => { logAction('quiz', `${learningTab} completed`); handleTopicComplete(learningTab); }} />
                                 </div>
                             </div>
                         </div>
@@ -736,109 +696,124 @@
                 );
             };
 
-            const renderIndustry = () => (
-                <div className="grid md:grid-cols-2 gap-8 mt-8">
-                    {['machining', 'retail'].map(ind => (
-                        <button
-                            key={ind}
-                            onClick={() => { setSelectedIndustry(ind); logAction('select', `Industry: ${ind}`); }}
-                            className={`p-8 rounded-xl border-2 transition-all duration-300 group text-left relative overflow-hidden ${selectedIndustry === ind ? 'border-emerald-500 bg-emerald-900/10 dark:bg-emerald-500/10' : 'border-transparent bg-white dark:bg-slate-800 hover:border-emerald-300'}`}
-                        >
-                            {selectedIndustry === ind && <div className="absolute top-0 right-0 bg-emerald-500 text-white text-xs px-3 py-1 rounded-bl">Selected</div>}
-                            <div className="mb-4 text-emerald-600 dark:text-emerald-400">
-                                {ind === 'machining' ? <SafeIcon name="Settings" size={48} /> : <SafeIcon name="User" size={48} />}
-                            </div>
-                            <h3 className="text-2xl font-bold mb-2">{t.industry[ind]}</h3>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm">
-                                {ind === 'machining' ? 'Focus: Quote accuracy & Scheduling (APS).' : 'Focus: Demand prediction & Waste reduction.'}
-                            </p>
-                        </button>
-                    ))}
-                </div>
-            );
+            const renderCombined = () => (
+                <div className="animate-fade-in space-y-6 h-full flex flex-col">
+                    {/* Industry Selection (Top) */}
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border border-emerald-100 dark:border-slate-700">
+                         <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                             <SafeIcon name="Briefcase" className="text-emerald-500"/> {t.combined.title}
+                         </h3>
+                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                             {Object.entries(t.combined.industries).map(([key, ind]) => (
+                                 <button key={key} onClick={() => { setSelectedIndustry(key); setChatHistory([]); }}
+                                     className={`p-4 rounded-xl border-2 transition-all duration-300 flex flex-col items-center text-center gap-2 group ${selectedIndustry === key ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-gray-100 dark:border-slate-700 hover:border-emerald-300'}`}>
+                                     <div className={`p-3 rounded-full ${selectedIndustry === key ? 'bg-emerald-500 text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-500 group-hover:text-emerald-500'}`}>
+                                         <SafeIcon name={ind.icon} size={28} />
+                                     </div>
+                                     <div>
+                                         <div className="font-bold text-sm">{ind.name}</div>
+                                         <div className="text-[10px] text-gray-400">{ind.desc}</div>
+                                     </div>
+                                 </button>
+                             ))}
+                         </div>
+                    </div>
 
-            const renderConsulting = () => (
-                <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 h-[600px] flex flex-col">
-                    <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-900">
-                        <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
-                            <span className="font-bold">{t.consulting.title}</span>
+                    {/* Chat Interface (Bottom) */}
+                    <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden min-h-[500px]">
+                        <div className="p-4 bg-emerald-600 text-white flex justify-between items-center shadow-md">
+                            <div className="flex items-center gap-2">
+                                <SafeIcon name="Brain" className="animate-pulse" />
+                                <span className="font-bold">{t.combined.chatHeader}</span>
+                            </div>
+                            {selectedIndustry && <span className="text-xs bg-emerald-700 px-2 py-1 rounded border border-emerald-400">{t.combined.industries[selectedIndustry].name}</span>}
                         </div>
-                        {selectedIndustry && <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded">{t.industry[selectedIndustry]}</span>}
-                    </div>
-                    
-                    <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                        {chatHistory.map((msg, i) => (
-                            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[80%] p-3 rounded-lg ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-gray-100 dark:bg-slate-700 rounded-bl-none'}`}>
-                                    {msg.text}
+                        
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-900/50">
+                            {chatHistory.length === 0 && (
+                                <div className="h-full flex flex-col items-center justify-center text-gray-400 opacity-60">
+                                    <SafeIcon name="MessageSquare" size={64} className="mb-4 text-emerald-200 dark:text-slate-700"/>
+                                    <p>{selectedIndustry ? t.combined.inputPlaceholder : t.combined.selectPrompt}</p>
                                 </div>
-                            </div>
-                        ))}
-                        {chatHistory.length === 0 && (
-                            <div className="h-full flex flex-col items-center justify-center text-gray-400">
-                                <SafeIcon name="MessageSquare" size={48} className="mb-2 opacity-50"/>
-                                <p>{t.consulting.welcome}</p>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="p-4 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-slate-700">
-                        <div className="flex gap-2 overflow-x-auto pb-3 mb-2">
-                            {t.consulting.presets.map((q, i) => (
-                                <button key={i} onClick={() => setChatInput(q)} className="whitespace-nowrap px-3 py-1 text-xs bg-white dark:bg-slate-800 border dark:border-slate-600 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900 hover:text-emerald-600 transition">
-                                    {q}
-                                </button>
+                            )}
+                            {chatHistory.map((msg, i) => (
+                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}>
+                                    <div className={`max-w-[80%] p-3 rounded-2xl shadow-sm text-sm ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-white dark:bg-slate-700 dark:text-white rounded-bl-none'}`}>
+                                        {msg.text}
+                                    </div>
+                                </div>
                             ))}
                         </div>
-                        <form onSubmit={handleChatSubmit} className="flex gap-2">
-                            <input 
-                                type="text" 
-                                value={chatInput}
-                                onChange={(e) => setChatInput(e.target.value)}
-                                placeholder={t.consulting.inputPlaceholder}
-                                disabled={!selectedIndustry}
-                                className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 disabled:opacity-50"
-                            />
-                            <button disabled={!selectedIndustry} type="submit" className="bg-emerald-600 text-white p-2 rounded-lg hover:bg-emerald-700 disabled:opacity-50 transition">
-                                <SafeIcon name="ArrowRight" />
-                            </button>
-                        </form>
+
+                        <div className="p-4 bg-white dark:bg-slate-800 border-t dark:border-slate-700">
+                             {selectedIndustry && (
+                                 <div className="flex gap-2 overflow-x-auto pb-3 mb-2 scrollbar-hide">
+                                     {t.combined.presets[selectedIndustry].map((q, i) => (
+                                         <button key={i} onClick={() => setChatInput(q)} className="whitespace-nowrap px-3 py-1 text-xs bg-emerald-50 dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 rounded-full hover:bg-emerald-100 transition border border-emerald-100 dark:border-slate-600">
+                                             {q}
+                                         </button>
+                                     ))}
+                                 </div>
+                             )}
+                             <form onSubmit={handleChatSubmit} className="flex gap-2">
+                                 <input type="text" value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder={t.combined.inputPlaceholder} disabled={!selectedIndustry}
+                                     className="flex-1 px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all disabled:opacity-50" />
+                                 <button disabled={!selectedIndustry} type="submit" className="bg-emerald-600 text-white p-2 rounded-xl hover:bg-emerald-700 disabled:opacity-50 transition shadow-lg hover:shadow-emerald-500/30">
+                                     <SafeIcon name="ArrowRight" />
+                                 </button>
+                             </form>
+                        </div>
                     </div>
                 </div>
             );
 
             const renderPlanning = () => {
-                if (!selectedIndustry) return <div className="text-center p-12 text-gray-400 border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl">{t.consulting.welcome}</div>;
+                if (!selectedIndustry) return <div className="text-center p-12 text-gray-400 border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl">{t.combined.selectPrompt}</div>;
                 
-                const planData = selectedIndustry === 'machining' ? [
-                    ["1. Digital Foundation", "M1-3", "Structured Quote Data, IoT", "Quote Search -30%", "Data Eng (40%)"],
-                    ["2. Process Improv", "M4-8", "APS Scheduling", "On-time 85%", "Software (30%)"],
-                    ["3. AI Transformation", "M9-12+", "Auto Valuation", "Margin Increase", "Ops (10%)"]
-                ] : [
-                    ["1. Digital Foundation", "M1-3", "Weather/Event DB", "Stockout -10%", "Data Eng (40%)"],
-                    ["2. Process Improv", "M4-8", "Sales Prediction", "Waste -20%", "Software (30%)"],
-                    ["3. AI Transformation", "M9-12+", "Dynamic Pricing", "Revenue Up", "Ops (10%)"]
-                ];
+                const plans = {
+                    machining: [
+                        ["1. Foundation", "M1-3", "Data Collection (IoT), Clean Quote Data", "Quote Search -30%", "Data Eng (40%)"],
+                        ["2. Process", "M4-8", "APS Scheduling System, Cost Analysis", "On-time 85%", "Software (30%)"],
+                        ["3. AI Scale", "M9-12", "Auto Valuation Model", "Margin +15%", "Change Mgmt (20%)"]
+                    ],
+                    retail: [
+                        ["1. Foundation", "M1-3", "POS/ERP Integration, Weather DB", "Stockout -10%", "Data Eng (40%)"],
+                        ["2. Process", "M4-8", "Demand Prediction, Shift Optimization", "Waste -20%", "Software (30%)"],
+                        ["3. AI Scale", "M9-12", "Dynamic Pricing, Member Churn AI", "Rev +10%", "Change Mgmt (20%)"]
+                    ],
+                    healthcare: [
+                        ["1. Foundation", "M1-3", "HIS Data Cleaning, Privacy Compliance", "Data Err -50%", "Data Eng (40%)"],
+                        ["2. Process", "M4-8", "Patient Flow Prediction, Chatbot triage", "Wait Time -30%", "Software (30%)"],
+                        ["3. AI Scale", "M9-12", "AI Diagnostic Assist (Img)", "Diag Speed +40%", "Change Mgmt (20%)"]
+                    ],
+                    agriculture: [
+                        ["1. Foundation", "M1-3", "Sensor Deployment (Soil/Weather)", "Data Coverage 100%", "Data Eng (40%)"],
+                        ["2. Process", "M4-8", "Irrigation Automation, Pest Alert", "Water -20%", "Software (30%)"],
+                        ["3. AI Scale", "M9-12", "Yield Prediction Model", "Yield +15%", "Change Mgmt (20%)"]
+                    ]
+                };
+                const planData = plans[selectedIndustry];
 
                 return (
-                    <div className="bg-white dark:bg-slate-800 rounded-xl shadow overflow-hidden">
-                        <div className="p-6 border-b dark:border-slate-700 flex justify-between items-center bg-gray-50 dark:bg-slate-900">
-                            <h3 className="text-xl font-bold">{t.planning.title} - {t.industry[selectedIndustry]}</h3>
-                            <button className="flex items-center gap-2 text-sm bg-emerald-600 text-white px-3 py-1.5 rounded hover:bg-emerald-700">
-                                <SafeIcon name="Save" size={16} /> Save Plan
+                    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden animate-fade-in">
+                        <div className="p-6 border-b dark:border-slate-700 flex justify-between items-center bg-emerald-50 dark:bg-slate-900">
+                            <h3 className="text-xl font-bold flex items-center gap-2">
+                                <SafeIcon name="Target" className="text-emerald-600"/> {t.planning.title} - {t.combined.industries[selectedIndustry].name}
+                            </h3>
+                            <button className="flex items-center gap-2 text-xs bg-emerald-600 text-white px-3 py-2 rounded shadow hover:bg-emerald-700 transition">
+                                <SafeIcon name="Save" size={14} /> Save
                             </button>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
-                                <thead className="bg-gray-100 dark:bg-slate-700 uppercase text-xs text-gray-500 dark:text-gray-300">
-                                    <tr>{t.planning.headers.map(h => <th key={h} className="px-6 py-3">{h}</th>)}</tr>
+                                <thead className="bg-gray-100 dark:bg-slate-700/50 uppercase text-xs font-bold text-gray-500 dark:text-gray-300">
+                                    <tr>{t.planning.headers.map(h => <th key={h} className="px-6 py-4">{h}</th>)}</tr>
                                 </thead>
-                                <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
+                                <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
                                     {planData.map((row, i) => (
-                                        <tr key={i} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
+                                        <tr key={i} className="hover:bg-emerald-50/50 dark:hover:bg-slate-700/30 transition-colors">
                                             {row.map((cell, j) => (
-                                                <td key={j} className={`px-6 py-4 ${j===0 ? 'font-bold text-emerald-600' : ''}`}>{cell}</td>
+                                                <td key={j} className={`px-6 py-4 ${j===0 ? 'font-bold text-emerald-600 dark:text-emerald-400' : ''}`}>{cell}</td>
                                             ))}
                                         </tr>
                                     ))}
@@ -849,102 +824,85 @@
                 );
             };
 
-            const renderHistory = () => (
-                <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6">
-                    <div className="flex justify-between items-center mb-6">
-                        <h3 className="text-xl font-bold flex items-center gap-2"><SafeIcon name="Clock" /> {t.history.title}</h3>
-                        <button onClick={downloadHistory} className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-slate-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition">
-                            <SafeIcon name="Download" size={16} /> {t.history.exportBtn}
-                        </button>
-                    </div>
-                    <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-slate-700">
-                        <table className="w-full text-left text-sm">
-                            <thead className="bg-gray-100 dark:bg-slate-900 font-bold">
-                                <tr>
-                                    {t.history.headers.map(h => <th key={h} className="px-4 py-3">{h}</th>)}
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
-                                {history.map((h, i) => (
-                                    <tr key={i} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
-                                        <td className="px-4 py-2 font-mono text-xs text-gray-500">{h.time}</td>
-                                        <td className="px-4 py-2">
-                                            <span className={`px-2 py-0.5 rounded text-xs font-bold ${
-                                                h.type === 'quiz' ? 'bg-purple-100 text-purple-800' :
-                                                h.type === 'chat' ? 'bg-blue-100 text-blue-800' :
-                                                h.type === 'select' ? 'bg-orange-100 text-orange-800' :
-                                                'bg-gray-200 text-gray-800'
-                                            }`}>
-                                                {t.history.types[h.type] || h.type}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-2">{h.detail}</td>
-                                    </tr>
-                                ))}
-                                {history.length === 0 && <tr><td colSpan="3" className="p-4 text-center text-gray-400">No logs yet.</td></tr>}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            );
-
-            // --- MAIN LAYOUT ---
             return (
-                <div className="min-h-screen flex flex-col">
-                    {/* Header */}
-                    <header className="fixed top-0 w-full h-16 bg-slate-900 text-white z-50 flex justify-between items-center px-4 md:px-8 border-b-2 border-emerald-600 shadow-md">
+                <div className="min-h-screen flex flex-col font-sans">
+                    <header className="fixed top-0 w-full h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md z-50 px-4 border-b border-gray-200 dark:border-slate-800 flex justify-between items-center transition-all">
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 hover:bg-slate-700 rounded transition">
+                            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
                                 {isMenuOpen ? <SafeIcon name="X" /> : <SafeIcon name="Menu" />}
                             </button>
                             <div className="flex flex-col cursor-pointer" onClick={() => switchSection('overview')}>
-                                <span className="font-serif font-bold text-lg tracking-wide text-emerald-400">{t.brand}</span>
+                                <span className="font-serif font-bold text-xl tracking-tight text-emerald-700 dark:text-emerald-400">{t.brand}</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => setLang(lang === 'TC' ? 'EN' : 'TC')} className="flex items-center gap-1 text-sm font-bold bg-slate-800 px-3 py-1 rounded hover:bg-slate-700 border border-slate-600">
-                                <SafeIcon name="Globe" size={14} /> {lang}
+                        <div className="flex items-center gap-3">
+                            <button onClick={() => setLang(lang === 'TC' ? 'EN' : 'TC')} className="flex items-center gap-1 text-xs font-bold bg-gray-100 dark:bg-slate-800 px-3 py-1.5 rounded-full hover:ring-2 ring-emerald-500 transition">
+                                <SafeIcon name="Globe" size={14} /> {lang==='TC'?'繁中/ENG':'ENG/繁中'}
                             </button>
-                            <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded hover:bg-slate-700">
-                                {darkMode ? <SafeIcon name="Sun" size={18} className="text-yellow-400" /> : <SafeIcon name="Moon" size={18} />}
+                            <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition text-yellow-500 dark:text-slate-300">
+                                {darkMode ? <SafeIcon name="Sun" size={18} /> : <SafeIcon name="Moon" size={18} />}
                             </button>
                         </div>
                     </header>
 
-                    {/* Nav Menu */}
                     {isMenuOpen && (
-                        <div className="fixed top-16 left-0 w-64 h-[calc(100vh-64px)] bg-slate-800 border-r border-slate-700 z-40 p-4 space-y-2 shadow-2xl animate-fade-in-right">
+                        <div className="fixed top-16 left-0 w-64 h-[calc(100vh-64px)] bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 z-40 p-4 space-y-1 shadow-2xl animate-fade-in">
                             {Object.entries(t.nav).map(([key, label]) => (
-                                <button
-                                    key={key}
-                                    onClick={() => switchSection(key)}
-                                    className={`w-full text-left p-3 rounded flex items-center gap-3 transition ${activeSection === key ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-slate-700'}`}
-                                >
-                                    {key === 'overview' && <SafeIcon name="BookOpen" size={18}/>}
-                                    {key === 'learning' && <SafeIcon name="Layout" size={18}/>}
-                                    {key === 'industry' && <SafeIcon name="Briefcase" size={18}/>}
-                                    {key === 'consulting' && <SafeIcon name="MessageSquare" size={18}/>}
-                                    {key === 'planning' && <SafeIcon name="Target" size={18}/>}
-                                    {key === 'history' && <SafeIcon name="Clock" size={18}/>}
+                                <button key={key} onClick={() => switchSection(key)}
+                                    className={`w-full text-left p-3 rounded-xl flex items-center gap-3 transition-all ${activeSection === key ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'text-slate-600 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800'}`}>
+                                    {key==='overview' && <SafeIcon name="BookOpen" size={18}/>}
+                                    {key==='learning' && <SafeIcon name="Layout" size={18}/>}
+                                    {key==='combined' && <SafeIcon name="Briefcase" size={18}/>}
+                                    {key==='planning' && <SafeIcon name="Target" size={18}/>}
+                                    {key==='history' && <SafeIcon name="Clock" size={18}/>}
                                     <span className="font-medium text-sm">{label}</span>
                                 </button>
                             ))}
                         </div>
                     )}
 
-                    {/* Content Area */}
-                    <main className="flex-1 pt-24 pb-16 px-4 md:px-8 max-w-6xl mx-auto w-full">
+                    <main className="flex-1 pt-24 pb-20 px-4 md:px-8 max-w-6xl mx-auto w-full">
                         {activeSection === 'overview' && renderOverview()}
                         {activeSection === 'learning' && renderLearning()}
-                        {activeSection === 'industry' && renderIndustry()}
-                        {activeSection === 'consulting' && renderConsulting()}
+                        {activeSection === 'combined' && renderCombined()}
                         {activeSection === 'planning' && renderPlanning()}
-                        {activeSection === 'history' && renderHistory()}
+                        {activeSection === 'history' && (
+                             <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 animate-fade-in">
+                                 <div className="flex justify-between items-center mb-6">
+                                     <h3 className="text-xl font-bold flex items-center gap-2"><SafeIcon name="Clock" /> {t.history.title}</h3>
+                                     <button onClick={downloadHistory} className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 rounded hover:bg-slate-200 transition text-xs">
+                                         <SafeIcon name="Download" size={14} /> {t.history.exportBtn}
+                                     </button>
+                                 </div>
+                                 <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-slate-700">
+                                     <table className="w-full text-left text-sm">
+                                         <thead className="bg-gray-50 dark:bg-slate-900 font-bold">
+                                             <tr>{t.history.headers.map(h => <th key={h} className="px-4 py-3">{h}</th>)}</tr>
+                                         </thead>
+                                         <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
+                                             {history.map((h, i) => (
+                                                 <tr key={i} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
+                                                     <td className="px-4 py-3 font-mono text-xs text-gray-400">{h.time}</td>
+                                                     <td className="px-4 py-3"><span className="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs font-bold">{h.type}</span></td>
+                                                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{h.detail}</td>
+                                                 </tr>
+                                             ))}
+                                             {history.length===0 && <tr><td colSpan="3" className="p-8 text-center text-gray-400">No actions recorded yet.</td></tr>}
+                                         </tbody>
+                                     </table>
+                                 </div>
+                             </div>
+                        )}
                     </main>
 
-                    {/* Footer */}
-                    <footer className="bg-slate-900 text-slate-400 py-4 text-center text-xs border-t border-slate-800">
-                        <p>© 2026 AI Strategy. Instructor: Prof. Shihmin Lo</p>
+                    <footer className="fixed bottom-0 w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 py-2 px-6 text-xs text-gray-500 flex justify-between items-center z-50">
+                        <div className="flex gap-4">
+                            <span>{new Date().toLocaleDateString()} v2.0 Enhanced</span>
+                            <span>&copy; 2026 AI Strategy</span>
+                        </div>
+                        <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition font-bold flex items-center gap-1">
+                            Instructor: Prof. Shihmin Lo <SafeIcon name="ArrowRight" size={10}/>
+                        </a>
                     </footer>
                 </div>
             );
