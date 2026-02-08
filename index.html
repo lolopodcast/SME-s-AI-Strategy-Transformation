@@ -85,7 +85,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
         
-        // --- INTERNAL ICON SYSTEM (ZERO DEPENDENCY) ---
+        // --- INTERNAL ICON SYSTEM ---
         const IconBase = ({ children, size = 24, className = "" }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
         );
@@ -97,6 +97,7 @@
             Moon: (p) => <IconBase {...p}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></IconBase>,
             Globe: (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></IconBase>,
             ChevronDown: (p) => <IconBase {...p}><path d="m6 9 6 6 6-6"/></IconBase>,
+            ChevronUp: (p) => <IconBase {...p}><path d="m18 15-6-6-6 6"/></IconBase>,
             MessageSquare: (p) => <IconBase {...p}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></IconBase>,
             Layout: (p) => <IconBase {...p}><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></IconBase>,
             Briefcase: (p) => <IconBase {...p}><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></IconBase>,
@@ -118,7 +119,8 @@
             TrendingUp: (p) => <IconBase {...p}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></IconBase>,
             Shield: (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></IconBase>,
             Zap: (p) => <IconBase {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></IconBase>,
-            Award: (p) => <IconBase {...p}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></IconBase>
+            Award: (p) => <IconBase {...p}><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></IconBase>,
+            Copy: (p) => <IconBase {...p}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></IconBase>
         };
 
         const SafeIcon = ({ name, size = 24, className, ...props }) => {
@@ -131,11 +133,10 @@
             TC: {
                 brand: "AI Strategy / Transformation",
                 nav: {
-                    overview: "A. 概要",
-                    learning: "B. 學習區",
-                    combined: "C. 產業與諮詢",
-                    planning: "E. 策略規劃",
-                    history: "F. 歷程紀錄"
+                    overview: "概要",
+                    learning: "學習區",
+                    combined: "產業與諮詢",
+                    planning: "策略規劃",
                 },
                 common: {
                     backTop: "回到頂端",
@@ -148,11 +149,16 @@
                     score: "得分",
                     voice: "語音導覽",
                     progress: "學習進度",
-                    badges: "成就徽章"
+                    badges: "成就徽章",
+                    history: "歷程紀錄",
+                    copy: "複製",
+                    saveChat: "儲存對話",
+                    copied: "已複製",
+                    noData: "暫無資料"
                 },
                 overview: {
-                    title: "中小企業 AI 導入與組織變革執行計畫",
-                    subtitle: "數據驅動營運轉型策略",
+                    title: "中小企業的 AI導入與組織變革",
+                    subtitle: "SME's AI Strategy and Org. Transformation",
                     core: "核心理念：擴增智慧 (Augmented Intelligence)",
                     desc: "本計畫旨在建立一套新的管理體系，從「依賴經驗的營運」轉向「可被量測、預測與管理的數據驅動營運」。AI 不在於取代人類，而是作為「副駕駛」輔助決策。",
                     author: "Prof. Shihmin Lo",
@@ -171,72 +177,238 @@
                         { id: 'method', title: "5. 實施方法論" },
                         { id: 'data', title: "6. 數據策略" },
                         { id: 'roi', title: "7. ROI 與 KPI" },
-                        { id: 'tactic', title: "8. 變革戰術" }
+                        { id: 'tactic', title: "8. 變革戰術" },
+                        { id: 'talent', title: "9. 人才策略" },
+                        { id: 'ethics', title: "10. AI 倫理與合規" }
                     ],
                     content: {
                         sme: {
-                            title: "中小企業 (SME) 的特性",
-                            text: "台灣中小企業佔98%，是隱形冠軍。優勢為決策快、彈性高；劣勢為資源少、人才斷層。AI 策略應採「以小博大」，解決特定痛點取得速贏 (Quick Win)。",
-                            terms: [{t:"Hidden Champions", d:"隱形冠軍：細分市場市佔高但低調的企業。"}],
-                            cards: [{f:"最大優勢？", b:"彈性與速度"}, {f:"常見障礙？", b:"預算、人才、慣性"}],
-                            quiz: [{q:"中小企業佔比？", options:["50%","98%","30%"], ans:1}, {q:"優先策略？", options:["全面導入","解決痛點","購買昂貴硬體"], ans:1}]
+                            title: "中小企業 (SME) 的特性與挑戰",
+                            text: "台灣中小企業佔全體企業約 98%，是經濟的隱形冠軍。其優勢在於決策流程短、市場反應速度快、經營彈性高，能迅速適應市場變化。然而，常見的劣勢包含資金與資源有限、數位化程度參差不齊、以及嚴重的人才斷層問題。針對這些特性，AI 導入策略不能照搬大企業模式，應採「以小博大」策略，專注於解決特定且具體的痛點，以低成本、高效率的方式取得「速贏」(Quick Win)，建立信心後再逐步擴大。",
+                            terms: [
+                                {t:"Hidden Champions", d:"隱形冠軍：在細分市場市佔率極高，但在大眾市場知名度較低的中小企業。"},
+                                {t:"Succession Gap", d:"傳承斷層：資深師傅退休後，經驗與技術無法有效移轉給年輕世代的風險。"},
+                                {t:"Quick Win", d:"速贏項目：能在短時間內以低成本展現具體成效的專案，用於建立信心。"},
+                                {t:"Digital Divide", d:"數位落差：企業間因數位技術應用能力不同而產生的競爭力差距。"}
+                            ],
+                            cards: [
+                                {f:"中小企業最大優勢？", b:"決策彈性與市場反應速度"},
+                                {f:"常見數位化障礙？", b:"預算不足、缺乏IT人才、組織慣性"},
+                                {f:"台灣 SME 佔比？", b:"約 98%"},
+                                {f:"什麼是隱形冠軍？", b:"市佔高但低調的強者"}
+                            ],
+                            quiz: [
+                                {q:"台灣中小企業佔比約？", options:["50%","98%","30%"], ans:1},
+                                {q:"中小企業最佳 AI 策略？", options:["全面無人化","解決特定痛點","建立大型機房"], ans:1},
+                                {q:"隱形冠軍通常指？", options:["知名大企業","細分市場強者","新創公司"], ans:1},
+                                {q:"中小企業常見劣勢？", options:["決策慢","資金人才不足","組織僵化"], ans:1}
+                            ]
                         },
                         change: {
                             title: "組織變革與 3P 模型",
-                            text: "克服「組織慣性」是關鍵。3P 模型：Position (定位)、Process (流程)、People (人員)。唯有三者同步調整，技術才能落地，避免「為了AI而AI」。",
-                            terms: [{t:"Organizational Inertia", d:"組織慣性：維持現狀的阻力。"}],
-                            cards: [{f:"最難改變的是？", b:"People (人)"}, {f:"3P 是哪三個？", b:"Position, Process, People"}],
-                            quiz: [{q:"哪項不是3P？", options:["Product","People","Process"], ans:0}, {q:"變革最大敵人？", options:["資金","慣性","硬體"], ans:1}]
+                            text: "變革是為了適應外部環境，但成敗關鍵往往不在技術，而在於克服「組織慣性」。我們使用 3P 模型進行分析：Position (策略定位) 決定方向，Process (作業流程) 決定效率，People (人員文化) 決定成敗。唯有三者同步調整，技術才能真正落地。例如，若只導入 AI 工具 (Process) 卻未調整員工心態 (People) 或獎勵機制 (Position)，系統終將被閒置。變革管理需關注員工的抗拒心理，並提供足夠的賦能。",
+                            terms: [
+                                {t:"Organizational Inertia", d:"組織慣性：組織傾向維持現狀、抗拒改變的力量，是變革失敗的主因。"},
+                                {t:"3P Model", d:"Position (定位), Process (流程), People (人) 三位一體模型。"},
+                                {t:"Change Fatigue", d:"變革疲勞：因頻繁或管理不當的變革導致員工精疲力竭。"},
+                                {t:"Empowerment", d:"賦能：給予員工所需的技能、權限與資源以適應新環境。"}
+                            ],
+                            cards: [
+                                {f:"變革中最難改變的是？", b:"People (人員思維與文化)"},
+                                {f:"3P 中 Position 代表？", b:"策略定位與目標設定"},
+                                {f:"何謂組織慣性？", b:"維持現狀、抗拒改變的力量"},
+                                {f:"3P 模型的三要素？", b:"Position, Process, People"}
+                            ],
+                            quiz: [
+                                {q:"3P 模型不包含？", options:["Product","People","Process"], ans:0},
+                                {q:"變革失敗最常見原因？", options:["技術太難","組織慣性","資金不足"], ans:1},
+                                {q:"Position 在 3P 中指？", options:["員工位置","策略定位","產品定位"], ans:1},
+                                {q:"如何減少變革疲勞？", options:["增加工作量","適當賦能與溝通","頻繁更換系統"], ans:1}
+                            ]
                         },
                         dx: {
-                            title: "數位轉型層次",
-                            text: "1. Digitization (數位化/轉檔); 2. Digitalization (數位優化/流程); 3. Digital Transformation (數位轉型/商模)。工業 4.0 核心為 CPS 虛實整合。",
-                            terms: [{t:"CPS", d:"Cyber-Physical Systems 虛實整合系統"}],
-                            cards: [{f:"紙本轉 Excel？", b:"Digitization"}, {f:"數據預測維修？", b:"Digitalization"}],
-                            quiz: [{q:"商模改變屬於？", options:["數位化","數位轉型","數位優化"], ans:1}, {q:"工業4.0核心？", options:["CPS","IoT","AI"], ans:0}]
+                            title: "數位轉型 (DX) 的層次",
+                            text: "數位轉型並非一蹴可幾，需分階段進行。第一層 Digitization (數位化) 是將類比資訊轉為數位格式 (如紙本轉 PDF)；第二層 Digitalization (數位優化) 是利用數位工具改善現有流程效率 (如 ERP 系統)；第三層 Digital Transformation (數位轉型) 則是利用數位技術徹底改變商業模式與價值創造方式。工業 4.0 的核心則是虛實整合系統 (CPS)，強調實體設備與數位系統的即時互動。",
+                            terms: [
+                                {t:"Digitization", d:"數位化：資訊載體的轉換，如紙本轉數位。"},
+                                {t:"Digitalization", d:"數位優化：流程的改善，利用數據提升效率。"},
+                                {t:"Digital Transformation", d:"數位轉型：商業模式的根本改變。"},
+                                {t:"CPS", d:"Cyber-Physical Systems：虛實整合系統，工業 4.0 的核心。"}
+                            ],
+                            cards: [
+                                {f:"將紙本報表輸入 Excel？", b:"Digitization (數位化)"},
+                                {f:"利用數據預測維修時間？", b:"Digitalization (數位優化)"},
+                                {f:"工業 4.0 核心？", b:"CPS (虛實整合系統)"},
+                                {f:"改變商業模式屬於？", b:"Digital Transformation (數位轉型)"}
+                            ],
+                            quiz: [
+                                {q:"商業模式的改變屬於？", options:["數位化","數位轉型","數位優化"], ans:1},
+                                {q:"工業 4.0 核心概念？", options:["CPS","大量生產","手工藝"], ans:0},
+                                {q:"紙本轉 PDF 是？", options:["Digitization","Digitalization","DX"], ans:0},
+                                {q:"利用數據改善流程是？", options:["Digitization","Digitalization","DX"], ans:1}
+                            ]
                         },
                         ai: {
                             title: "AI 定義與分類",
-                            text: "AI 是擴增智慧。分類：Generative AI (生成內容)、Agentic AI (自主決策代理人)、Physical AI (機器人)。機會：效率；威脅：偏見、隱私。",
-                            terms: [{t:"Agentic AI", d:"能自主設定目標並行動的 AI 代理人"}],
-                            cards: [{f:"ChatGPT 是？", b:"Generative AI"}, {f:"機械手臂 AI？", b:"Physical AI"}],
-                            quiz: [{q:"自主決策 AI？", options:["Chatbot","Agentic AI","GenAI"], ans:1}, {q:"AI 角色？", options:["取代人類","副駕駛","裝飾品"], ans:1}]
+                            text: "在本計畫中，AI 被定義為「擴增智慧」(Augmented Intelligence)，意在輔助而非取代人類。現代 AI 主要分為：Generative AI (生成式 AI) 能創造新內容；Agentic AI (代理人 AI) 能自主設定目標並採取行動；Physical AI (實體 AI) 則是結合機器人的實體應用。AI 帶來效率與創新的機會，但也伴隨著演算法偏見、隱私洩漏及工作取代的威脅。理解這些分類有助於選擇合適的技術解決方案。",
+                            terms: [
+                                {t:"Augmented Intelligence", d:"擴增智慧：強調 AI 是人類的輔助工具。"},
+                                {t:"Generative AI", d:"生成式 AI：能創造文本、影像等新內容的模型。"},
+                                {t:"Agentic AI", d:"代理人 AI：具備目標導向、能自主決策與行動的系統。"},
+                                {t:"Hallucination", d:"幻覺：生成式 AI 產生看似合理但完全錯誤的資訊。"}
+                            ],
+                            cards: [
+                                {f:"ChatGPT 屬於哪種 AI？", b:"Generative AI (生成式 AI)"},
+                                {f:"能自主操作機械手臂的 AI？", b:"Physical AI (實體 AI)"},
+                                {f:"AI 作為副駕駛的概念？", b:"Augmented Intelligence"},
+                                {f:"Agentic AI 的特徵？", b:"自主設定目標與行動"}
+                            ],
+                            quiz: [
+                                {q:"能自主設定目標並執行的 AI？", options:["Chatbot","Agentic AI","GenAI"], ans:1},
+                                {q:"本計畫中 AI 的定位？", options:["取代人類","副駕駛 (擴增智慧)","全自動駕駛"], ans:1},
+                                {q:"創造新內容的 AI？", options:["Physical AI","Generative AI","Rule-based AI"], ans:1},
+                                {q:"AI 產生錯誤資訊稱為？", options:["Bug","Hallucination (幻覺)","Virus"], ans:1}
+                            ]
                         },
                         method: {
-                            title: "AI 實施方法論",
-                            text: "建議採用 CRISP-DM 流程：商業理解 -> 數據理解 -> 數據準備 -> 模型建立 -> 評估 -> 部署。並結合 Agile 敏捷開發，快速迭代驗證。",
-                            terms: [{t:"CRISP-DM", d:"跨行業數據挖掘標準流程"}, {t:"Agile", d:"敏捷開發，強調快速迭代與回饋"}],
-                            cards: [{f:"第一步是？", b:"商業理解 (Business Understanding)"}, {f:"數據準備佔比？", b:"通常佔 70-80% 時間"}],
-                            quiz: [{q:"CRISP-DM 第一步？", options:["數據理解","商業理解","模型建立"], ans:1}, {q:"敏捷開發核心？", options:["完整文件","快速迭代","嚴格合約"], ans:1}]
+                            title: "AI 實施方法論 (CRISP-DM)",
+                            text: "AI 專案建議採用 CRISP-DM 標準流程：1. 商業理解 (定義問題與目標)；2. 數據理解 (盤點數據現狀)；3. 數據準備 (清洗與標註，通常佔 80% 時間)；4. 模型建立 (選擇演算法)；5. 評估 (驗證準確度與效益)；6. 部署 (上線與監控)。此外，應結合 Agile (敏捷開發) 思維，透過短週期的迭代 (Sprint) 快速驗證假設，避免長週期開發帶來的風險。",
+                            terms: [
+                                {t:"CRISP-DM", d:"跨行業數據挖掘標準流程，包含六個階段。"},
+                                {t:"Agile", d:"敏捷開發：強調快速迭代、靈活應變的開發模式。"},
+                                {t:"POC", d:"Proof of Concept：概念驗證，小規模測試技術可行性。"},
+                                {t:"Sprint", d:"衝刺：敏捷開發中的短週期迭代單位。"}
+                            ],
+                            cards: [
+                                {f:"CRISP-DM 第一步是？", b:"商業理解 (Business Understanding)"},
+                                {f:"數據準備通常佔多少時間？", b:"約 70-80%"},
+                                {f:"小規模測試可行性？", b:"POC (概念驗證)"},
+                                {f:"敏捷開發的迭代單位？", b:"Sprint (衝刺)"}
+                            ],
+                            quiz: [
+                                {q:"驗證技術可行性的階段？", options:["POC","部署","維運"], ans:0},
+                                {q:"敏捷開發的核心？", options:["完整文件","快速迭代與回饋","嚴格合約"], ans:1},
+                                {q:"CRISP-DM 最耗時的階段？", options:["模型建立","數據準備","部署"], ans:1},
+                                {q:"商業理解的目標？", options:["定義問題與目標","清洗數據","購買硬體"], ans:0}
+                            ]
                         },
                         data: {
                             title: "數據策略與治理",
-                            text: "數據是 AI 的燃料。需建立「單一數據源」(Single Source of Truth)，打破部門孤島 (Silos)。重視數據品質，避免 GIGO (垃圾進垃圾出)。",
-                            terms: [{t:"Data Silo", d:"數據孤島，部門間數據不流通"}, {t:"GIGO", d:"Garbage In, Garbage Out"}],
-                            cards: [{f:"GIGO 意思？", b:"垃圾進，垃圾出"}, {f:"數據整合目標？", b:"單一數據源 (SSOT)"}],
-                            quiz: [{q:"數據品質差導致？", options:["GIGO","效率高","成本低"], ans:0}, {q:"解決孤島的方法？", options:["加密","建立單一數據源","各管各的"], ans:1}]
+                            text: "數據是 AI 的燃料，數據策略是轉型的基石。首要任務是打破部門間的「數據孤島」(Data Silos)，建立組織層級的「單一數據源」(Single Source of Truth, SSOT)。必須嚴格管控數據品質，因為「垃圾進，垃圾出」(GIGO) 是 AI 專案失敗的主因。數據治理包含定義數據標準、權限管理及隱私保護。對於中小企業，建議從盤點核心業務數據開始，逐步建立數據倉庫或數據湖。",
+                            terms: [
+                                {t:"Data Silo", d:"數據孤島：數據被封鎖在特定部門，無法流通共享。"},
+                                {t:"SSOT", d:"Single Source of Truth：單一數據源，確保全組織數據一致。"},
+                                {t:"GIGO", d:"Garbage In, Garbage Out：輸入品質差的數據，只會得到無用的結果。"},
+                                {t:"Data Governance", d:"數據治理：管理數據可用性、完整性與安全性的流程。"}
+                            ],
+                            cards: [
+                                {f:"GIGO 的意思？", b:"Garbage In, Garbage Out (垃圾進垃圾出)"},
+                                {f:"解決數據孤島的目標？", b:"建立單一數據源 (SSOT)"},
+                                {f:"數據治理包含？", b:"標準、權限、安全"},
+                                {f:"什麼是 Data Silo？", b:"數據孤島，部門間不流通"}
+                            ],
+                            quiz: [
+                                {q:"數據品質低落會導致？", options:["GIGO","效率提升","成本降低"], ans:0},
+                                {q:"確保數據一致性的策略？", options:["各部門獨立備份","建立 SSOT","加密數據"], ans:1},
+                                {q:"數據治理不包含？", options:["硬體維修","權限管理","隱私保護"], ans:0},
+                                {q:"部門間數據不流通稱為？", options:["數據湖","數據孤島","數據庫"], ans:1}
+                            ]
                         },
                         roi: {
                             title: "ROI 與 KPI 設定",
-                            text: "ROI 不僅看財務回報，也包含無形效益 (軟性價值)。KPI 應包含：效率指標 (時間/成本)、品質指標 (良率/準確度)、滿意度指標。",
-                            terms: [{t:"TCO", d:"總體擁有成本"}, {t:"Soft Benefits", d:"無形效益，如員工滿意度、品牌形象"}],
-                            cards: [{f:"ROI 全名？", b:"Return on Investment"}, {f:"軟性效益例子？", b:"決策速度、員工滿意度"}],
-                            quiz: [{q:"TCO 代表？", options:["總營收","總擁有成本","技術長"], ans:1}, {q:"良率屬於？", options:["效率指標","品質指標","財務指標"], ans:1}]
+                            text: "評估 AI 效益不能只看財務回報 (Hard Benefits)，更要重視無形效益 (Soft Benefits)。ROI 計算公式為 (總效益 - 總成本) / 總成本。成本包含 TCO (總體擁有成本：軟硬體、人力、維運)。KPI 設定應包含：1. 效率指標 (如處理時間縮短)；2. 品質指標 (如預測準確率提升)；3. 營運指標 (如庫存週轉率)。軟性效益如「員工滿意度提升」或「決策速度加快」雖難量化，但對長期競爭力至關重要。",
+                            terms: [
+                                {t:"ROI", d:"Return on Investment：投資報酬率。"},
+                                {t:"TCO", d:"Total Cost of Ownership：總體擁有成本，包含顯性與隱性成本。"},
+                                {t:"Soft Benefits", d:"無形效益：難以直接量化但具價值的效益，如品牌形象。"},
+                                {t:"KPI", d:"Key Performance Indicator：關鍵績效指標。"}
+                            ],
+                            cards: [
+                                {f:"TCO 包含哪些？", b:"軟硬體成本、人力、維護、訓練等"},
+                                {f:"軟性效益的例子？", b:"決策速度、員工滿意度、創新能力"},
+                                {f:"KPI 全名？", b:"Key Performance Indicator"},
+                                {f:"ROI 計算核心？", b:"(效益 - 成本) / 成本"}
+                            ],
+                            quiz: [
+                                {q:"TCO 代表？", options:["總營收","總體擁有成本","技術長"], ans:1},
+                                {q:"預測準確率屬於哪類 KPI？", options:["效率指標","品質指標","財務指標"], ans:1},
+                                {q:"品牌形象提升屬於？", options:["有形效益","無形效益 (Soft Benefits)","沈沒成本"], ans:1},
+                                {q:"評估 AI 效益應考慮？", options:["僅財務回報","財務與無形效益","僅技術先進度"], ans:1}
+                            ]
                         },
                         tactic: {
                             title: "變革管理戰術",
-                            text: "採用 Kotter 八步驟或 ADKAR 模型。戰術：1. 建立急迫感 2. 溝通願景 3. 賦能員工 4. 創造短期戰果 (Quick Wins) 以增強信心。",
-                            terms: [{t:"Quick Wins", d:"速贏項目，能快速展現成效的計畫"}, {t:"ADKAR", d:"Awareness, Desire, Knowledge, Ability, Reinforcement"}],
-                            cards: [{f:"克服抗拒最好方法？", b:"溝通與賦能"}, {f:"初期專案重點？", b:"建立 Quick Wins"}],
-                            quiz: [{q:"增強信心的戰術？", options:["畫大餅","創造短期戰果","增加工時"], ans:1}, {q:"ADKAR 的 A 代表？", options:["Awareness","Action","AI"], ans:0}]
+                            text: "變革管理是確保 AI 落地的人本工程。建議採用 Kotter 八步驟或 ADKAR 模型。實務戰術包含：1. 建立急迫感 (說明不改變的危機)；2. 溝通願景 (描繪 AI 賦能後的未來)；3. 賦能員工 (提供足夠的培訓與工具)；4. 創造短期戰果 (Quick Wins)。特別是 Quick Wins，能快速證明 AI 的價值，消除懷疑論者的阻力。溝通時應強調 AI 是為了「減少重複勞動」而非「裁員」。",
+                            terms: [
+                                {t:"ADKAR", d:"Awareness, Desire, Knowledge, Ability, Reinforcement 的變革模型。"},
+                                {t:"Quick Wins", d:"速贏項目：能快速展現成效，增強團隊信心的專案。"},
+                                {t:"Kotter's 8 Steps", d:"科特變革八步驟，經典的變革管理框架。"},
+                                {t:"Empowerment", d:"賦能：給予員工所需的技能、權限與資源。"}
+                            ],
+                            cards: [
+                                {f:"克服抗拒最好的方法？", b:"溝通願景與賦能員工"},
+                                {f:"為什麼需要 Quick Wins？", b:"建立信心，消除阻力"},
+                                {f:"變革溝通重點？", b:"AI 減少勞動而非裁員"},
+                                {f:"ADKAR 模型起點？", b:"Awareness (認知)"}
+                            ],
+                            quiz: [
+                                {q:"增強信心的最佳戰術？", options:["畫大餅","創造短期戰果 (Quick Wins)","強制命令"], ans:1},
+                                {q:"ADKAR 的 A 代表？", options:["Awareness (認知)","Action","AI"], ans:0},
+                                {q:"賦能 (Empowerment) 意指？", options:["給予更多工作","提供技能與資源","減少薪資"], ans:1},
+                                {q:"變革管理的目的？", options:["購買軟體","確保技術落地與人員適應","增加管理層"], ans:1}
+                            ]
+                        },
+                        talent: {
+                            title: "人才策略與技能轉型",
+                            text: "AI 時代的人才策略不在於招聘多少 AI 博士，而在於培養「雙語人才」(Domain + AI Translator)。這類人才既懂業務痛點，又懂 AI 技術邊界，能擔任橋樑角色。企業應推動 Upskilling (技能提升) 與 Reskilling (技能重塑)，讓現有員工學會使用 AI 工具 (如 Prompt Engineering)。同時，需建立容錯文化，鼓勵員工嘗試新技術，並將 AI 應用能力納入績效考核或晉升標準。",
+                            terms: [
+                                {t:"AI Translator", d:"AI 翻譯官：懂業務也懂技術，負責溝通需求的橋樑人才。"},
+                                {t:"Upskilling", d:"技能提升：在現有職位上學習新技能以提升表現。"},
+                                {t:"Reskilling", d:"技能重塑：學習全新技能以適應新職位或新需求。"},
+                                {t:"Prompt Engineering", d:"提示工程：設計有效指令引導 AI 生成預期結果的技能。"}
+                            ],
+                            cards: [
+                                {f:"企業最需要的 AI 人才？", b:"雙語人才 (AI Translator)"},
+                                {f:"Upskilling 的意思？", b:"提升現有技能"},
+                                {f:"Reskilling 的意思？", b:"學習新技能轉職"},
+                                {f:"什麼是 Prompt Engineering？", b:"設計指令引導 AI"}
+                            ],
+                            quiz: [
+                                {q:"連接業務與技術的角色？", options:["工程師","AI Translator","專案經理"], ans:1},
+                                {q:"讓員工適應新職位的訓練？", options:["Onboarding","Reskilling","Upskilling"], ans:1},
+                                {q:"在原職位提升技能？", options:["Upskilling","Reskilling","Hiring"], ans:0},
+                                {q:"引導 AI 生成結果的技能？", options:["Coding","Prompt Engineering","Data Entry"], ans:1}
+                            ]
+                        },
+                        ethics: {
+                            title: "AI 倫理與合規",
+                            text: "隨著 AI 應用普及，倫理與合規風險日益重要。主要議題包含：1. 演算法偏見 (Bias)：模型因訓練數據不均而產生歧視；2. 可解釋性 (XAI)：AI 的決策過程是否透明可懂；3. 隱私保護：如何確保數據不被濫用 (如 GDPR 合規)；4. 責任歸屬：AI 犯錯時由誰負責。企業應建立 AI 治理委員會，制定內部使用規範，並在導入前進行倫理影響評估，確保「負責任的 AI」(Responsible AI)。",
+                            terms: [
+                                {t:"Algorithmic Bias", d:"演算法偏見：AI 模型反映或放大了數據中的社會偏見。"},
+                                {t:"XAI", d:"Explainable AI：可解釋 AI，讓人理解 AI 決策邏輯的技術。"},
+                                {t:"GDPR", d:"歐盟一般資料保護規則，嚴格規範數據隱私。"},
+                                {t:"Responsible AI", d:"負責任的 AI：開發與部署符合倫理、安全且可信的 AI。"}
+                            ],
+                            cards: [
+                                {f:"確保 AI 決策透明的技術？", b:"XAI (可解釋 AI)"},
+                                {f:"模型產生歧視稱為？", b:"演算法偏見 (Bias)"},
+                                {f:"GDPR 關注什麼？", b:"數據隱私保護"},
+                                {f:"Responsible AI 目標？", b:"安全、可信、合規"}
+                            ],
+                            quiz: [
+                                {q:"讓人類理解 AI 決策過程？", options:["黑箱測試","XAI","深度學習"], ans:1},
+                                {q:"負責任 AI 的核心？", options:["速度最快","合規、公平、透明","成本最低"], ans:1},
+                                {q:"AI 放大社會偏見稱為？", options:["Bias (偏見)","Bug","Feature"], ans:0},
+                                {q:"確保數據隱私的法規？", options:["ISO 9001","GDPR","SOP"], ans:1}
+                            ]
                         }
                     }
                 },
                 combined: {
                     title: "產業選擇與 AI 顧問諮詢",
-                    selectPrompt: "請選擇您的產業以啟動專屬 AI 顧問：",
+                    selectPrompt: "請先選擇您的產業類別，以啟動專屬的 AI 轉型顧問：",
                     chatHeader: "AI 轉型顧問",
-                    inputPlaceholder: "詢問關於該產業的轉型策略...",
+                    inputPlaceholder: "請輸入您的問題，例如：如何開始數位轉型？",
                     industries: {
                         machining: { name: "機械加工業", desc: "離散製造、排程優化", icon: "Settings" },
                         retail: { name: "食品零售業", desc: "連鎖服務、需求預測", icon: "User" },
@@ -244,7 +416,7 @@
                         agriculture: { name: "精準農業", desc: "產量預測、病蟲害", icon: "Sprout" }
                     },
                     presets: {
-                        machining: ["如何改善報價準確度？", "排程混亂怎麼辦？", "數據如何蒐集？"],
+                        machining: ["如何改善報價準確度？", "排程混亂怎麼辦？", "數據如何蒐集 (IoT)？"],
                         retail: ["如何減少報廢？", "會員行銷策略？", "動態定價是什麼？"],
                         healthcare: ["如何縮短候診時間？", "AI 輔助診斷應用？", "病歷數據隱私？"],
                         agriculture: ["如何預測產量？", "農藥減量策略？", "IoT 監控應用？"]
@@ -252,10 +424,12 @@
                 },
                 planning: {
                     title: "策略規劃書",
-                    headers: ["階段", "時程", "行動方案", "KPI", "資源配置 (40-30-20-10)"]
+                    objTitle: "策略目標 (Strategic Objectives)",
+                    riskTitle: "風險與管理 (Risk Management)",
+                    headers: ["階段", "時程", "行動方案 (點擊查看詳情)", "KPI 指標", "資源配置 (40-30-20-10)"]
                 },
                 history: {
-                    title: "歷程紀錄",
+                    title: "學習歷程紀錄",
                     headers: ["時間", "類別", "詳細內容"],
                     exportBtn: "匯出歷程 (JSON)"
                 }
@@ -263,11 +437,10 @@
             EN: {
                 brand: "AI Strategy / Transformation",
                 nav: {
-                    overview: "A. Overview",
-                    learning: "B. Learning Area",
-                    combined: "C. Industry & Consulting",
-                    planning: "E. Planning",
-                    history: "F. History"
+                    overview: "Overview",
+                    learning: "Learning",
+                    combined: "Consulting",
+                    planning: "Planning",
                 },
                 common: {
                     backTop: "Back to Top",
@@ -279,11 +452,16 @@
                     wrong: "Incorrect",
                     score: "Score",
                     voice: "Audio Guide",
-                    progress: "Progress",
-                    badges: "Badges"
+                    progress: "Learning Progress",
+                    badges: "Badges",
+                    history: "History Log",
+                    copy: "Copy",
+                    saveChat: "Save Chat",
+                    copied: "Copied!",
+                    noData: "No Data"
                 },
                 overview: {
-                    title: "SME AI Adoption & Org Change Strategy",
+                    title: "SME's AI Strategy and Org. Transformation",
                     subtitle: "Data-Driven Operational Transformation",
                     core: "Core Philosophy: Augmented Intelligence",
                     desc: "This plan aims to establish a new management system, shifting from 'experience-based' to 'data-driven' operations. AI acts as a 'Co-pilot' to assist decision-making, not to replace humans.",
@@ -303,64 +481,230 @@
                         { id: 'method', title: "5. Methodology" },
                         { id: 'data', title: "6. Data Strategy" },
                         { id: 'roi', title: "7. ROI & KPI" },
-                        { id: 'tactic', title: "8. Change Tactics" }
+                        { id: 'tactic', title: "8. Change Tactics" },
+                        { id: 'talent', title: "9. Talent Strategy" },
+                        { id: 'ethics', title: "10. AI Ethics" }
                     ],
                     content: {
                         sme: {
-                            title: "SME Definition & Advantages",
-                            text: "SMEs make up 98% of Taiwan's businesses (Hidden Champions). Pros: Flexibility, Speed. Cons: Resources, Talent gap. Strategy: 'Quick Wins' focusing on specific pain points.",
-                            terms: [{t:"Hidden Champions", d:"Market leaders in niche segments with low visibility."}],
-                            cards: [{f:"Biggest SME advantage?", b:"Flexibility & Speed"}, {f:"Common barrier?", b:"Budget, Talent, Inertia"}],
-                            quiz: [{q:"SME % in Taiwan?", options:["50%","98%","30%"], ans:1}, {q:"Priority strategy?", options:["Full Automation","Solve Pain Points","Buy Hardware"], ans:1}]
+                            title: "SME Definition, Advantages & Challenges",
+                            text: "SMEs make up 98% of Taiwan's businesses, serving as 'Hidden Champions'. Their key advantages are flexibility, speed, and agility in decision-making. However, they face significant challenges such as limited resources, budgets, and a talent gap. Unlike large enterprises, SMEs cannot afford massive, long-term failures. Therefore, the AI adoption strategy must focus on 'Quick Wins'—targeting specific pain points to demonstrate value rapidly and cost-effectively, building confidence for broader adoption.",
+                            terms: [
+                                {t:"Hidden Champions", d:"Companies with high market share in niche segments but low public visibility."},
+                                {t:"Succession Gap", d:"Risk of knowledge loss when senior experts retire without transferring skills."},
+                                {t:"Quick Win", d:"A project that delivers visible results quickly and cheaply to validate value."},
+                                {t:"Digital Divide", d:"The gap between those who have ready access to computers and the internet, and those who do not."}
+                            ],
+                            cards: [
+                                {f:"Biggest SME advantage?", b:"Flexibility & Speed"},
+                                {f:"Common barrier?", b:"Budget, Talent, Inertia"},
+                                {f:"What is a Quick Win?", b:"Fast, low-cost project to show value"},
+                                {f:"Hidden Champions mean?", b:"Niche market leaders"}
+                            ],
+                            quiz: [
+                                {q:"SME % in Taiwan?", options:["50%","98%","30%"], ans:1},
+                                {q:"Priority strategy?", options:["Full Automation","Solve Pain Points","Buy Hardware"], ans:1},
+                                {q:"Typical SME weakness?", options:["Speed","Resources","Agility"], ans:1},
+                                {q:"Quick Wins help to?", options:["Waste money","Build confidence","Increase complexity"], ans:1}
+                            ]
                         },
                         change: {
-                            title: "Org Change & 3P Model",
-                            text: "Overcoming 'Organizational Inertia' is key. 3P Model: Position, Process, People. All three must align for tech adoption to succeed.",
-                            terms: [{t:"Organizational Inertia", d:"Resistance to change."}],
-                            cards: [{f:"Hardest to change?", b:"People"}, {f:"What are the 3Ps?", b:"Position, Process, People"}],
-                            quiz: [{q:"Not a P?", options:["Product","People","Process"], ans:0}, {q:"Biggest enemy?", options:["Money","Inertia","Hardware"], ans:1}]
+                            title: "Organizational Change & 3P Model",
+                            text: "The biggest barrier to digital transformation is not technology, but 'Organizational Inertia'. We use the 3P Model to analyze readiness: Position (Strategic goals), Process (Workflow efficiency), and People (Culture & Mindset). Technology adoption will fail if People are resistant or Processes are flawed. Change management involves aligning these three elements, addressing employee fears, and providing necessary training (Empowerment) to ensure the technology is actually used.",
+                            terms: [
+                                {t:"Organizational Inertia", d:"The tendency of an organization to resist change and maintain the status quo."},
+                                {t:"3P Model", d:"Position, Process, People. A framework for holistic change."},
+                                {t:"Change Fatigue", d:"Exhaustion caused by constant or poorly managed organizational changes."},
+                                {t:"Empowerment", d:"Giving employees authority and skills to act."}
+                            ],
+                            cards: [
+                                {f:"Hardest to change?", b:"People"},
+                                {f:"What are the 3Ps?", b:"Position, Process, People"},
+                                {f:"Main cause of failure?", b:"Organizational Inertia"},
+                                {f:"Position in 3P?", b:"Strategy & Goals"}
+                            ],
+                            quiz: [
+                                {q:"Not a P?", options:["Product","People","Process"], ans:0},
+                                {q:"Biggest enemy?", options:["Money","Inertia","Hardware"], ans:1},
+                                {q:"How to fix Inertia?", options:["Ignore it","Change Management","Fire everyone"], ans:1},
+                                {q:"Empowerment involves?", options:["Training & Tools","Micro-management","Less pay"], ans:0}
+                            ]
                         },
                         dx: {
-                            title: "Levels of DX",
-                            text: "1. Digitization (Analog to Digital); 2. Digitalization (Process Optimization); 3. Digital Transformation (Business Model). Industry 4.0 core is CPS.",
-                            terms: [{t:"CPS", d:"Cyber-Physical Systems"}],
-                            cards: [{f:"Paper to Excel?", b:"Digitization"}, {f:"Predictive Maint?", b:"Digitalization"}],
-                            quiz: [{q:"Business Model change?", options:["Digitization","DX","Digitalization"], ans:1}, {q:"Ind 4.0 Core?", options:["CPS","IoT","AI"], ans:0}]
+                            title: "Levels of Digital Transformation (DX)",
+                            text: "DX is a journey with three distinct levels. 1. Digitization: Converting analog info to digital (e.g., paper to PDF). 2. Digitalization: Using digital data to optimize processes (e.g., using ERP to track inventory). 3. Digital Transformation: Fundamentally changing the business model (e.g., selling service instead of product). Industry 4.0 focuses on Cyber-Physical Systems (CPS), integrating physical machines with digital networks for real-time control.",
+                            terms: [
+                                {t:"Digitization", d:"Conversion of analog information into digital format."},
+                                {t:"Digitalization", d:"Improving processes using digital technologies."},
+                                {t:"Digital Transformation", d:"Strategic transformation of the business model."},
+                                {t:"CPS", d:"Cyber-Physical Systems: Integration of computation and physical processes."}
+                            ],
+                            cards: [
+                                {f:"Paper to Excel?", b:"Digitization"},
+                                {f:"Predictive Maint?", b:"Digitalization"},
+                                {f:"Industry 4.0 core?", b:"CPS"},
+                                {f:"Biz Model Change?", b:"Digital Transformation"}
+                            ],
+                            quiz: [
+                                {q:"Business Model change?", options:["Digitization","DX","Digitalization"], ans:1},
+                                {q:"Ind 4.0 Core?", options:["CPS","IoT","AI"], ans:0},
+                                {q:"Paper to Digital?", options:["Digitization","Digitalization","DX"], ans:0},
+                                {q:"Process Optimization?", options:["Digitization","Digitalization","DX"], ans:1}
+                            ]
                         },
                         ai: {
                             title: "AI Definitions & Types",
-                            text: "AI is Augmented Intelligence. Types: Generative AI (Content), Agentic AI (Autonomous Agents), Physical AI (Robots). Opportunity: Efficiency; Threat: Bias.",
-                            terms: [{t:"Agentic AI", d:"AI agents that pursue goals autonomously."}],
-                            cards: [{f:"ChatGPT is?", b:"Generative AI"}, {f:"Robot Arm AI?", b:"Physical AI"}],
-                            quiz: [{q:"Autonomous AI?", options:["Chatbot","Agentic AI","GenAI"], ans:1}, {q:"AI Role?", options:["Replace Human","Co-pilot","Toy"], ans:1}]
+                            text: "In this plan, AI is defined as 'Augmented Intelligence', acting as a co-pilot to humans. Key types include: Generative AI (creates new content like text/images), Agentic AI (autonomous agents that set goals and act), and Physical AI (robotics/hardware). While AI offers efficiency and innovation, it also poses threats such as algorithmic bias, privacy violations, and job displacement anxieties. Understanding these types helps in selecting the right tool for the job.",
+                            terms: [
+                                {t:"Augmented Intelligence", d:"AI designed to enhance human intelligence rather than replace it."},
+                                {t:"Generative AI", d:"AI capable of generating new content."},
+                                {t:"Agentic AI", d:"AI agents that pursue goals autonomously."},
+                                {t:"Hallucination", d:"When AI generates confident but false information."}
+                            ],
+                            cards: [
+                                {f:"ChatGPT is?", b:"Generative AI"},
+                                {f:"Robot Arm AI?", b:"Physical AI"},
+                                {f:"AI as Co-pilot?", b:"Augmented Intelligence"},
+                                {f:"Autonomous Goal Setting?", b:"Agentic AI"}
+                            ],
+                            quiz: [
+                                {q:"Autonomous AI?", options:["Chatbot","Agentic AI","GenAI"], ans:1},
+                                {q:"AI Role?", options:["Replace Human","Co-pilot","Toy"], ans:1},
+                                {q:"AI creating art?", options:["Physical AI","Generative AI","Old AI"], ans:1},
+                                {q:"Fake facts from AI?", options:["Truth","Hallucination","Data"], ans:1}
+                            ]
                         },
                         method: {
-                            title: "Implementation Methodology",
-                            text: "Use CRISP-DM: Business Understanding -> Data Understanding -> Prep -> Modeling -> Eval -> Deploy. Combine with Agile for fast iterations.",
-                            terms: [{t:"CRISP-DM", d:"Standard process for data mining."}, {t:"Agile", d:"Iterative development approach."}],
-                            cards: [{f:"First step?", b:"Business Understanding"}, {f:"Time spent on Data Prep?", b:"70-80%"}],
-                            quiz: [{q:"First step of CRISP-DM?", options:["Data","Business","Model"], ans:1}, {q:"Agile core?", options:["Docs","Iterations","Contracts"], ans:1}]
+                            title: "Implementation Methodology (CRISP-DM)",
+                            text: "We follow the CRISP-DM standard: 1. Business Understanding (Define goals), 2. Data Understanding, 3. Data Preparation (Cleaning/Labeling - takes 80% of time), 4. Modeling, 5. Evaluation, 6. Deployment. This is combined with Agile methodology, using short 'Sprints' to iterate and validate models quickly. This approach reduces the risk of building a large system that doesn't fit user needs or market reality.",
+                            terms: [
+                                {t:"CRISP-DM", d:"Cross-Industry Standard Process for Data Mining."},
+                                {t:"Agile", d:"Iterative development approach focusing on flexibility."},
+                                {t:"POC", d:"Proof of Concept: Small scale test to verify feasibility."},
+                                {t:"Sprint", d:"A set period of time during which specific work has to be completed."}
+                            ],
+                            cards: [
+                                {f:"First step?", b:"Business Understanding"},
+                                {f:"Time spent on Data Prep?", b:"70-80%"},
+                                {f:"Small feasibility test?", b:"POC"},
+                                {f:"Agile unit?", b:"Sprint"}
+                            ],
+                            quiz: [
+                                {q:"First step of CRISP-DM?", options:["Data","Business","Model"], ans:1},
+                                {q:"Agile core?", options:["Docs","Iterations","Contracts"], ans:1},
+                                {q:"Longest phase?", options:["Modeling","Data Prep","Deployment"], ans:1},
+                                {q:"Why Agile?", options:["Slow & Steady","Fast & Flexible","Rigid"], ans:1}
+                            ]
                         },
                         data: {
                             title: "Data Strategy & Governance",
-                            text: "Data is fuel. Establish a 'Single Source of Truth' (SSOT) to break Data Silos. Focus on quality to avoid GIGO (Garbage In, Garbage Out).",
-                            terms: [{t:"Data Silo", d:"Isolated data pockets."}, {t:"GIGO", d:"Garbage In, Garbage Out"}],
-                            cards: [{f:"GIGO means?", b:"Garbage In, Garbage Out"}, {f:"Integration Goal?", b:"Single Source of Truth"}],
-                            quiz: [{q:"Poor data leads to?", options:["GIGO","Success","Savings"], ans:0}, {q:"Solving Silos?", options:["Encryption","SSOT","Isolation"], ans:1}]
+                            text: "Data is the fuel for AI. The strategy focuses on breaking 'Data Silos' to create a 'Single Source of Truth' (SSOT). Without high-quality data, AI fails due to 'Garbage In, Garbage Out' (GIGO). Data Governance involves setting standards, managing access, and ensuring privacy. For SMEs, the journey starts with identifying key business data and gradually building a centralized data warehouse or lake.",
+                            terms: [
+                                {t:"Data Silo", d:"Isolated data pockets within an organization."},
+                                {t:"SSOT", d:"Single Source of Truth: One view of data for everyone."},
+                                {t:"GIGO", d:"Garbage In, Garbage Out: Bad input equals bad output."},
+                                {t:"Data Governance", d:"Management of data availability, usability, integrity, and security."}
+                            ],
+                            cards: [
+                                {f:"GIGO means?", b:"Garbage In, Garbage Out"},
+                                {f:"Integration Goal?", b:"Single Source of Truth"},
+                                {f:"Isolated Data?", b:"Data Silo"},
+                                {f:"Data Governance?", b:"Managing data quality & security"}
+                            ],
+                            quiz: [
+                                {q:"Poor data leads to?", options:["GIGO","Success","Savings"], ans:0},
+                                {q:"Solving Silos?", options:["Encryption","SSOT","Isolation"], ans:1},
+                                {q:"Single Source of Truth?", options:["One boss","Unified Data","One computer"], ans:1},
+                                {q:"Governance involves?", options:["Hardware","Security & Quality","Parties"], ans:1}
+                            ]
                         },
                         roi: {
-                            title: "ROI & KPI",
-                            text: "ROI includes financial and Soft Benefits (intangibles). KPIs: Efficiency (Time/Cost), Quality (Accuracy/Yield), Satisfaction.",
-                            terms: [{t:"TCO", d:"Total Cost of Ownership"}, {t:"Soft Benefits", d:"Intangibles like morale, brand."}],
-                            cards: [{f:"ROI stands for?", b:"Return on Investment"}, {f:"Soft benefit example?", b:"Decision Speed, Morale"}],
-                            quiz: [{q:"TCO means?", options:["Revenue","Total Cost","CTO"], ans:1}, {q:"Yield rate is?", options:["Efficiency","Quality","Financial"], ans:1}]
+                            title: "ROI & KPI Setting",
+                            text: "ROI calculations must include Financial (Hard) and Intangible (Soft) benefits. Formula: (Net Profit / Total Cost) * 100. Costs include TCO (Total Cost of Ownership: hardware, software, labor, maintenance). KPIs should be categorized into: Efficiency (Time/Cost), Quality (Accuracy/Yield), and Operational metrics. Soft benefits like 'Employee Satisfaction' or 'Brand Image' are crucial for long-term sustainability.",
+                            terms: [
+                                {t:"ROI", d:"Return on Investment."},
+                                {t:"TCO", d:"Total Cost of Ownership: All direct and indirect costs."},
+                                {t:"Soft Benefits", d:"Intangible gains like morale or brand reputation."},
+                                {t:"KPI", d:"Key Performance Indicator."}
+                            ],
+                            cards: [
+                                {f:"ROI stands for?", b:"Return on Investment"},
+                                {f:"Soft benefit example?", b:"Decision Speed, Morale"},
+                                {f:"TCO means?", b:"Total Cost of Ownership"},
+                                {f:"Efficiency KPI?", b:"Time or Cost reduction"}
+                            ],
+                            quiz: [
+                                {q:"TCO means?", options:["Revenue","Total Cost","CTO"], ans:1},
+                                {q:"Yield rate is?", options:["Efficiency","Quality","Financial"], ans:1},
+                                {q:"Intangible benefit?", options:["Cash","Soft Benefit","Hard Benefit"], ans:1},
+                                {q:"ROI Formula?", options:["Cost/Profit","(Profit-Cost)/Cost","Profit+Cost"], ans:1}
+                            ]
                         },
                         tactic: {
                             title: "Change Management Tactics",
-                            text: "Use Kotter's 8 Steps or ADKAR. Tactics: 1. Urgency 2. Vision 3. Empowerment 4. Create Quick Wins to build confidence.",
-                            terms: [{t:"Quick Wins", d:"Early successes to validate project."}, {t:"ADKAR", d:"Awareness, Desire, Knowledge, Ability, Reinforcement"}],
-                            cards: [{f:"Best way to handle resistance?", b:"Communication & Empowerment"}, {f:"Early project focus?", b:"Quick Wins"}],
-                            quiz: [{q:"Tactic for confidence?", options:["Promises","Quick Wins","More Work"], ans:1}, {q:"'A' in ADKAR?", options:["Awareness","Action","AI"], ans:0}]
+                            text: "Change Management ensures tech adoption. We use models like Kotter's 8 Steps or ADKAR. Key tactics: 1. Create Urgency (Why change now?), 2. Communicate Vision (Where are we going?), 3. Empower Action (Training/Tools), 4. Generate Quick Wins. Quick Wins are vital to prove value to skeptics. Communication should emphasize that AI reduces drudgery, allowing humans to focus on higher-value tasks.",
+                            terms: [
+                                {t:"ADKAR", d:"Model: Awareness, Desire, Knowledge, Ability, Reinforcement."},
+                                {t:"Quick Wins", d:"Early successes that validate the project."},
+                                {t:"Kotter's 8 Steps", d:"A famous framework for leading change."},
+                                {t:"Empowerment", d:"Giving employees authority and skills to act."}
+                            ],
+                            cards: [
+                                {f:"Best way to handle resistance?", b:"Communication & Empowerment"},
+                                {f:"Early project focus?", b:"Quick Wins"},
+                                {f:"ADKAR 'A'?", b:"Awareness"},
+                                {f:"Kotter's 1st step?", b:"Create Urgency"}
+                            ],
+                            quiz: [
+                                {q:"Tactic for confidence?", options:["Promises","Quick Wins","More Work"], ans:1},
+                                {q:"'A' in ADKAR?", options:["Awareness","Action","AI"], ans:0},
+                                {q:"Empowerment?", options:["Training","Firing","Ignoring"], ans:0},
+                                {q:"Kotter Step 1?", options:["Vision","Urgency","Wins"], ans:1}
+                            ]
+                        },
+                        talent: {
+                            title: "Talent Strategy & Upskilling",
+                            text: "The goal isn't just hiring AI PhDs, but cultivating 'AI Translators'—staff who understand both business needs and tech capabilities. Companies must invest in 'Upskilling' (improving current skills) and 'Reskilling' (learning new roles) for existing employees. Training should cover tools like Prompt Engineering. A culture of tolerance for failure is essential to encourage experimentation.",
+                            terms: [
+                                {t:"AI Translator", d:"Bridge talent understanding both business and tech."},
+                                {t:"Upskilling", d:"Teaching employees new skills for their current job."},
+                                {t:"Reskilling", d:"Training employees for a different job."},
+                                {t:"Prompt Engineering", d:"Crafting inputs to guide AI models effectively."}
+                            ],
+                            cards: [
+                                {f:"Key bridge role?", b:"AI Translator"},
+                                {f:"Upskilling means?", b:"Improving current skills"},
+                                {f:"Reskilling means?", b:"Learning new job skills"},
+                                {f:"Prompt Engineering?", b:"Guiding AI Output"}
+                            ],
+                            quiz: [
+                                {q:"Role linking biz & tech?", options:["Coder","AI Translator","PM"], ans:1},
+                                {q:"Training for new role?", options:["Onboarding","Reskilling","Upskilling"], ans:1},
+                                {q:"Training for current role?", options:["Reskilling","Upskilling","Hiring"], ans:1},
+                                {q:"Guiding AI?", options:["Prompt Eng","Coding","Clicking"], ans:0}
+                            ]
+                        },
+                        ethics: {
+                            title: "AI Ethics & Compliance",
+                            text: "As AI spreads, Ethics and Compliance become critical. Key issues: 1. Algorithmic Bias (Models amplifying societal prejudice), 2. Explainability (XAI - understanding how AI decides), 3. Privacy (GDPR, data protection), 4. Accountability. Companies need an AI Governance body to set rules and conduct impact assessments, ensuring 'Responsible AI' deployment.",
+                            terms: [
+                                {t:"Algorithmic Bias", d:"Systematic and unfair discrimination in AI output."},
+                                {t:"XAI", d:"Explainable AI: Techniques to make AI decision-making transparent."},
+                                {t:"GDPR", d:"EU regulation on data protection and privacy."},
+                                {t:"Responsible AI", d:"Developing AI that is safe, trustworthy, and ethical."}
+                            ],
+                            cards: [
+                                {f:"Tech for transparency?", b:"XAI (Explainable AI)"},
+                                {f:"Unfair AI output?", b:"Algorithmic Bias"},
+                                {f:"GDPR concerns?", b:"Privacy"},
+                                {f:"Responsible AI?", b:"Ethical & Safe"}
+                            ],
+                            quiz: [
+                                {q:"Understanding AI decisions?", options:["Blackbox","XAI","Deep Learning"], ans:1},
+                                {q:"Responsible AI focus?", options:["Speed","Trust & Fairness","Cost"], ans:1},
+                                {q:"Bias in AI?", options:["Good","Bad/Unfair","Neutral"], ans:1},
+                                {q:"GDPR protects?", options:["Profits","Data Privacy","Algorithms"], ans:1}
+                            ]
                         }
                     }
                 },
@@ -384,7 +728,9 @@
                 },
                 planning: {
                     title: "Strategic Plan",
-                    headers: ["Phase", "Timeline", "Action Plan", "KPI", "Resources (40-30-20-10)"]
+                    objTitle: "Strategic Objectives",
+                    riskTitle: "Risk Management",
+                    headers: ["Phase", "Timeline", "Action Plan (Click for details)", "KPI", "Resources (40-30-20-10)"]
                 },
                 history: {
                     title: "History Log",
@@ -457,7 +803,7 @@
             if (showResult) {
                 return (
                     <div className="bg-emerald-50 dark:bg-slate-800 p-4 rounded-xl text-center border border-emerald-200 dark:border-emerald-900 animate-fade-in">
-                        <h4 className="font-bold mb-2 text-emerald-800 dark:text-emerald-400">{texts.score}: {score} / {questions.length}</h4>
+                        <h4 className="font-bold mb-2 text-emerald-800 dark:text-emerald-400">{texts.score}: {score} / {questions.length} ({Math.round((score/questions.length)*100)}%)</h4>
                         <ProgressBar completed={score} total={questions.length} text="" />
                         <button onClick={() => { setCurrent(0); setScore(0); setShowResult(false); setSelected(null); }} className="px-3 py-1 bg-emerald-600 text-white rounded hover:bg-emerald-700 text-xs flex items-center justify-center gap-1 mx-auto">
                             <SafeIcon name="RefreshCw" size={12} /> {texts.retry}
@@ -512,6 +858,9 @@
             const [chatInput, setChatInput] = useState("");
             const [isSpeaking, setIsSpeaking] = useState(false);
             const [completedTopics, setCompletedTopics] = useState([]);
+            const [copiedIndex, setCopiedIndex] = useState(null);
+            const [expandedRow, setExpandedRow] = useState(null);
+            const [showHistoryDropdown, setShowHistoryDropdown] = useState(false);
 
             const t = CONTENT[lang];
 
@@ -522,6 +871,11 @@
 
             const logAction = (type, detail) => {
                 setHistory(prev => [{ time: new Date().toLocaleTimeString(), type, detail }, ...prev]);
+            };
+
+            const scrollToTop = () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                logAction('nav', 'Scrolled to top');
             };
 
             const switchSection = (id) => {
@@ -550,23 +904,14 @@
                 setTimeout(() => {
                     let reply = "";
                     const lq = query.toLowerCase();
-                    // Richer Logic
                     if (!selectedIndustry) {
                         reply = "Please select an industry first.";
-                    } else if (lq.includes("budget") || lq.includes("預算") || lq.includes("resource") || lq.includes("40-30")) {
-                        reply = lang === 'TC' ? 
-                            "根據 40-30-20-10 法則：40% 用於數據工程(最重要但常被忽略)，30% 軟體設施，20% 變革管理(人員培訓)，10% 維運模型。" : 
-                            "According to the 40-30-20-10 rule: 40% Data Engineering, 30% Software, 20% Change Mgmt, 10% Maintenance.";
-                    } else if (lq.includes("step") || lq.includes("第一步") || lq.includes("start")) {
-                        reply = lang === 'TC' ? 
-                            "建議從「單一數據源」(SSOT) 開始，並在該產業中找到一個具體的「速贏項目」(Quick Win)，例如機械業的報價查找或零售業的缺貨預測。" : 
-                            "Start with a 'Single Source of Truth' (SSOT) and a 'Quick Win' project, like quote search for machining or stockout prediction for retail.";
-                    } else if (selectedIndustry === 'healthcare' && (lq.includes("privacy") || lq.includes("隱私"))) {
-                         reply = lang === 'TC' ? "在醫療領域，數據隱私(如HIPAA合規)是首要考量。建議採用聯邦學習(Federated Learning)技術，讓數據不出院即可訓練模型。" : "In healthcare, privacy (HIPAA) is paramount. We recommend Federated Learning so data stays on-premise while training models.";
-                    } else if (selectedIndustry === 'agriculture' && (lq.includes("iot") || lq.includes("yield"))) {
-                         reply = lang === 'TC' ? "精準農業依賴 IoT 感測器蒐集微氣候數據。結合歷史產量數據，AI 可預測最佳收成期與病蟲害風險。" : "Precision Ag relies on IoT sensors for micro-climate data. Combined with history, AI predicts harvest windows and pest risks.";
+                    } else if (lq.includes("budget") || lq.includes("預算") || lq.includes("resource")) {
+                        reply = lang === 'TC' ? "根據 40-30-20-10 法則：40% 用於數據工程(最重要但常被忽略)，30% 軟體設施，20% 變革管理，10% 維運模型。" : "40-30-20-10 rule: 40% Data Engineering, 30% Software, 20% Change Mgmt, 10% Maintenance.";
+                    } else if (lq.includes("start") || lq.includes("開始") || lq.includes("step")) {
+                        reply = lang === 'TC' ? "建議從「單一數據源」(SSOT) 開始，並在該產業中找到一個具體的「速贏項目」(Quick Win)。" : "Start with a 'Single Source of Truth' (SSOT) and a 'Quick Win' project.";
                     } else {
-                        reply = lang === 'TC' ? "這是個好問題。建議您參考「變革管理」章節，並確認您的數據品質是否已準備好 (避免 GIGO)。" : "Good question. Please refer to the 'Change Management' section and ensure your data quality is ready (avoid GIGO).";
+                        reply = lang === 'TC' ? "這是個好問題。建議您參考「變革管理」章節，並確認數據品質 (避免 GIGO)。" : "Good question. Refer to 'Change Management' and check data quality (GIGO).";
                     }
                     setChatHistory(prev => [...prev, { role: 'bot', text: reply }]);
                 }, 600);
@@ -583,6 +928,24 @@
                 setIsSpeaking(true);
             };
 
+            const copyToClipboard = (text, index) => {
+                navigator.clipboard.writeText(text);
+                setCopiedIndex(index);
+                setTimeout(() => setCopiedIndex(null), 2000);
+                logAction('chat', 'Message copied');
+            };
+
+            const saveChat = () => {
+                const chatText = chatHistory.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n');
+                const element = document.createElement("a");
+                const file = new Blob([chatText], {type: 'text/plain'});
+                element.href = URL.createObjectURL(file);
+                element.download = "consultation_log.txt";
+                document.body.appendChild(element); 
+                element.click();
+                logAction('chat', 'Chat saved');
+            };
+
             const downloadHistory = () => {
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history, null, 2));
                 const a = document.createElement('a'); a.href = dataStr; a.download = "history.json"; a.click();
@@ -592,7 +955,6 @@
 
             const renderOverview = () => (
                 <div className="space-y-8 animate-fade-in pb-8">
-                    {/* Hero */}
                     <div className="bg-gradient-to-br from-white to-emerald-50 dark:from-slate-800 dark:to-slate-900 p-8 rounded-2xl shadow-xl border-l-8 border-emerald-500 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -mr-16 -mt-16 animate-pulse-slow"></div>
                         <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 relative z-10">{t.overview.title}</h1>
@@ -645,6 +1007,31 @@
                             </div>
                         </div>
 
+                        {/* Integrated History Log Dropdown */}
+                        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
+                            <button onClick={() => setShowHistoryDropdown(!showHistoryDropdown)} className="w-full p-3 flex justify-between items-center bg-gray-50 dark:bg-slate-700 hover:bg-gray-100 dark:hover:bg-slate-600 transition">
+                                <span className="font-bold text-sm flex items-center gap-2"><SafeIcon name="Clock" size={16}/> {t.common.history}</span>
+                                <SafeIcon name={showHistoryDropdown ? "ChevronUp" : "ChevronDown"} size={16}/>
+                            </button>
+                            {showHistoryDropdown && (
+                                <div className="p-4 max-h-48 overflow-y-auto">
+                                    {history.length === 0 ? <p className="text-xs text-gray-400 text-center">{t.common.noData}</p> : (
+                                        <table className="w-full text-left text-xs">
+                                            <tbody>
+                                                {history.map((h, i) => (
+                                                    <tr key={i} className="border-b border-gray-100 dark:border-slate-600">
+                                                        <td className="py-1 font-mono text-gray-400">{h.time}</td>
+                                                        <td className="py-1 font-bold text-emerald-600">{h.type}</td>
+                                                        <td className="py-1 text-gray-600 dark:text-gray-300 truncate max-w-xs">{h.detail}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
                         {/* Topics Nav */}
                         <div className="flex flex-wrap gap-2 pb-2">
                             {t.learning.topics.map(topic => (
@@ -665,7 +1052,7 @@
                                         </button>
                                     </div>
                                     <h3 className="text-2xl font-bold font-serif mb-4 text-emerald-800 dark:text-emerald-400">{topicData.title}</h3>
-                                    <p className="text-lg leading-loose text-gray-700 dark:text-gray-300">{topicData.text}</p>
+                                    <p className="text-lg leading-loose text-gray-700 dark:text-gray-300 text-justify">{topicData.text}</p>
                                 </div>
 
                                 <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border border-gray-100 dark:border-slate-700">
@@ -698,7 +1085,6 @@
 
             const renderCombined = () => (
                 <div className="animate-fade-in space-y-6 h-full flex flex-col">
-                    {/* Industry Selection (Top) */}
                     <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border border-emerald-100 dark:border-slate-700">
                          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                              <SafeIcon name="Briefcase" className="text-emerald-500"/> {t.combined.title}
@@ -719,14 +1105,16 @@
                          </div>
                     </div>
 
-                    {/* Chat Interface (Bottom) */}
                     <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden min-h-[500px]">
                         <div className="p-4 bg-emerald-600 text-white flex justify-between items-center shadow-md">
                             <div className="flex items-center gap-2">
                                 <SafeIcon name="Brain" className="animate-pulse" />
                                 <span className="font-bold">{t.combined.chatHeader}</span>
                             </div>
-                            {selectedIndustry && <span className="text-xs bg-emerald-700 px-2 py-1 rounded border border-emerald-400">{t.combined.industries[selectedIndustry].name}</span>}
+                            {selectedIndustry && <div className="flex items-center gap-2">
+                                <span className="text-xs bg-emerald-700 px-2 py-1 rounded border border-emerald-400">{t.combined.industries[selectedIndustry].name}</span>
+                                <button onClick={saveChat} title={t.common.saveChat} className="p-1 hover:bg-emerald-500 rounded transition"><SafeIcon name="Save" size={16}/></button>
+                            </div>}
                         </div>
                         
                         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-900/50">
@@ -737,9 +1125,12 @@
                                 </div>
                             )}
                             {chatHistory.map((msg, i) => (
-                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}>
-                                    <div className={`max-w-[80%] p-3 rounded-2xl shadow-sm text-sm ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-white dark:bg-slate-700 dark:text-white rounded-bl-none'}`}>
+                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up group`}>
+                                    <div className={`max-w-[80%] p-3 rounded-2xl shadow-sm text-sm relative ${msg.role === 'user' ? 'bg-emerald-600 text-white rounded-br-none' : 'bg-white dark:bg-slate-700 dark:text-white rounded-bl-none'}`}>
                                         {msg.text}
+                                        <button onClick={() => copyToClipboard(msg.text, i)} className={`absolute top-1 right-1 p-1 rounded hover:bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity`}>
+                                            {copiedIndex === i ? <SafeIcon name="CheckCircle" size={12}/> : <SafeIcon name="Copy" size={12}/>}
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -771,54 +1162,100 @@
                 if (!selectedIndustry) return <div className="text-center p-12 text-gray-400 border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl">{t.combined.selectPrompt}</div>;
                 
                 const plans = {
-                    machining: [
-                        ["1. Foundation", "M1-3", "Data Collection (IoT), Clean Quote Data", "Quote Search -30%", "Data Eng (40%)"],
-                        ["2. Process", "M4-8", "APS Scheduling System, Cost Analysis", "On-time 85%", "Software (30%)"],
-                        ["3. AI Scale", "M9-12", "Auto Valuation Model", "Margin +15%", "Change Mgmt (20%)"]
-                    ],
-                    retail: [
-                        ["1. Foundation", "M1-3", "POS/ERP Integration, Weather DB", "Stockout -10%", "Data Eng (40%)"],
-                        ["2. Process", "M4-8", "Demand Prediction, Shift Optimization", "Waste -20%", "Software (30%)"],
-                        ["3. AI Scale", "M9-12", "Dynamic Pricing, Member Churn AI", "Rev +10%", "Change Mgmt (20%)"]
-                    ],
-                    healthcare: [
-                        ["1. Foundation", "M1-3", "HIS Data Cleaning, Privacy Compliance", "Data Err -50%", "Data Eng (40%)"],
-                        ["2. Process", "M4-8", "Patient Flow Prediction, Chatbot triage", "Wait Time -30%", "Software (30%)"],
-                        ["3. AI Scale", "M9-12", "AI Diagnostic Assist (Img)", "Diag Speed +40%", "Change Mgmt (20%)"]
-                    ],
-                    agriculture: [
-                        ["1. Foundation", "M1-3", "Sensor Deployment (Soil/Weather)", "Data Coverage 100%", "Data Eng (40%)"],
-                        ["2. Process", "M4-8", "Irrigation Automation, Pest Alert", "Water -20%", "Software (30%)"],
-                        ["3. AI Scale", "M9-12", "Yield Prediction Model", "Yield +15%", "Change Mgmt (20%)"]
-                    ]
+                    machining: {
+                        obj: ["建立產能透明化系統", "提升報價精準度至 95%", "降低排程衝突 50%"],
+                        rows: [
+                            { ph: "1. Foundation", tm: "M1-3", act: "IoT 數據採集、報價數據清洗", dtl: "安裝機台三色燈感測器，建立報價歷史資料庫。", kpi: "Quote Search -30%", res: "Data Eng (40%)" },
+                            { ph: "2. Process", tm: "M4-8", act: "APS 排程系統導入", dtl: "串接 ERP 與 MES，導入自動化排程演算法。", kpi: "On-time 85%", res: "Software (30%)" },
+                            { ph: "3. AI Scale", tm: "M9-12", act: "AI 輔助估價模型", dtl: "基於歷史成本與工時，自動推薦報價區間。", kpi: "Margin +15%", res: "Change Mgmt (20%)" }
+                        ],
+                        risk: "現場人員抗拒數位回報 (對策：簡化介面、獎勵機制)"
+                    },
+                    retail: {
+                        obj: ["最佳化庫存管理", "提升會員回購率", "降低報廢成本"],
+                        rows: [
+                            { ph: "1. Foundation", tm: "M1-3", act: "POS/ERP 整合、天氣資料庫", dtl: "打通銷售與庫存數據，引入氣象因子。", kpi: "Stockout -10%", res: "Data Eng (40%)" },
+                            { ph: "2. Process", tm: "M4-8", act: "銷量預測與排班優化", dtl: "建立機器學習模型預測單店日銷量。", kpi: "Waste -20%", res: "Software (30%)" },
+                            { ph: "3. AI Scale", tm: "M9-12", act: "動態定價 (Dynamic Pricing)", dtl: "針對即期品自動生成最佳折扣。", kpi: "Rev +10%", res: "Change Mgmt (20%)" }
+                        ],
+                        risk: "門市人員操作不規範 (對策：防呆設計、教育訓練)"
+                    },
+                    healthcare: {
+                        obj: ["縮短病患候診時間", "提升診斷輔助效率", "確保數據合規"],
+                        rows: [
+                            { ph: "1. Foundation", tm: "M1-3", act: "HIS 數據清洗、隱私合規盤點", dtl: "去除個資 (De-identification)，建立標準化數據集。", kpi: "Data Err -50%", res: "Data Eng (40%)" },
+                            { ph: "2. Process", tm: "M4-8", act: "病患流動預測、智慧分流", dtl: "預測各科室尖峰時段，動態調整人力。", kpi: "Wait Time -30%", res: "Software (30%)" },
+                            { ph: "3. AI Scale", tm: "M9-12", act: "AI 影像輔助診斷", dtl: "導入 X 光/CT 初篩模型，輔助醫師判讀。", kpi: "Diag Speed +40%", res: "Change Mgmt (20%)" }
+                        ],
+                        risk: "數據隱私洩漏 (對策：地端部署、聯邦學習)"
+                    },
+                    agriculture: {
+                        obj: ["精準預測產量", "降低農藥與水資源浪費", "自動化監控"],
+                        rows: [
+                            { ph: "1. Foundation", tm: "M1-3", act: "微氣候感測器佈建", dtl: "安裝土壤溫濕度、光照感測器，建立數據站。", kpi: "Data Cov 100%", res: "Data Eng (40%)" },
+                            { ph: "2. Process", tm: "M4-8", act: "自動灌溉與病蟲害警示", dtl: "根據感測數據自動控制水閥，影像辨識病蟲害。", kpi: "Water -20%", res: "Software (30%)" },
+                            { ph: "3. AI Scale", tm: "M9-12", act: "產量預測模型", dtl: "結合歷史氣候與收成數據，預估最佳採收期。", kpi: "Yield +15%", res: "Change Mgmt (20%)" }
+                        ],
+                        risk: "硬體設備戶外損壞 (對策：選用工業級防護設備)"
+                    }
                 };
-                const planData = plans[selectedIndustry];
+                const currentPlan = plans[selectedIndustry];
 
                 return (
-                    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden animate-fade-in">
-                        <div className="p-6 border-b dark:border-slate-700 flex justify-between items-center bg-emerald-50 dark:bg-slate-900">
-                            <h3 className="text-xl font-bold flex items-center gap-2">
-                                <SafeIcon name="Target" className="text-emerald-600"/> {t.planning.title} - {t.combined.industries[selectedIndustry].name}
-                            </h3>
-                            <button className="flex items-center gap-2 text-xs bg-emerald-600 text-white px-3 py-2 rounded shadow hover:bg-emerald-700 transition">
-                                <SafeIcon name="Save" size={14} /> Save
-                            </button>
+                    <div className="space-y-6 animate-fade-in">
+                        {/* Strategic Objectives */}
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow border-l-4 border-emerald-500">
+                            <h3 className="font-bold text-lg mb-3 flex items-center gap-2"><SafeIcon name="Target" className="text-emerald-500"/> {t.planning.objTitle}</h3>
+                            <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700 dark:text-gray-300">
+                                {currentPlan.obj.map((o, i) => <li key={i}>{o}</li>)}
+                            </ul>
                         </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left text-sm">
-                                <thead className="bg-gray-100 dark:bg-slate-700/50 uppercase text-xs font-bold text-gray-500 dark:text-gray-300">
-                                    <tr>{t.planning.headers.map(h => <th key={h} className="px-6 py-4">{h}</th>)}</tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
-                                    {planData.map((row, i) => (
-                                        <tr key={i} className="hover:bg-emerald-50/50 dark:hover:bg-slate-700/30 transition-colors">
-                                            {row.map((cell, j) => (
-                                                <td key={j} className={`px-6 py-4 ${j===0 ? 'font-bold text-emerald-600 dark:text-emerald-400' : ''}`}>{cell}</td>
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+
+                        {/* Plan Table */}
+                        <div className="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden">
+                            <div className="p-6 border-b dark:border-slate-700 flex justify-between items-center bg-emerald-50 dark:bg-slate-900">
+                                <h3 className="text-xl font-bold flex items-center gap-2">
+                                    <SafeIcon name="Layout" className="text-emerald-600"/> {t.planning.title} - {t.combined.industries[selectedIndustry].name}
+                                </h3>
+                                <button className="flex items-center gap-2 text-xs bg-emerald-600 text-white px-3 py-2 rounded shadow hover:bg-emerald-700 transition">
+                                    <SafeIcon name="Save" size={14} /> Save
+                                </button>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-sm">
+                                    <thead className="bg-gray-100 dark:bg-slate-700/50 uppercase text-xs font-bold text-gray-500 dark:text-gray-300">
+                                        <tr>{t.planning.headers.map(h => <th key={h} className="px-6 py-4">{h}</th>)}</tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
+                                        {currentPlan.rows.map((row, i) => (
+                                            <React.Fragment key={i}>
+                                                <tr onClick={() => setExpandedRow(expandedRow === i ? null : i)} className="hover:bg-emerald-50/50 dark:hover:bg-slate-700/30 transition-colors cursor-pointer group">
+                                                    <td className={`px-6 py-4 ${i===0 ? 'font-bold text-emerald-600 dark:text-emerald-400' : ''}`}>{row.ph}</td>
+                                                    <td className="px-6 py-4">{row.tm}</td>
+                                                    <td className="px-6 py-4 flex items-center gap-2">
+                                                        {row.act} <SafeIcon name={expandedRow === i ? "ChevronUp" : "ChevronDown"} size={14} className="text-gray-400"/>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-emerald-600 font-bold">{row.kpi}</td>
+                                                    <td className="px-6 py-4">{row.res}</td>
+                                                </tr>
+                                                {expandedRow === i && (
+                                                    <tr className="bg-emerald-50/30 dark:bg-slate-700/20 animate-fade-in">
+                                                        <td colSpan="5" className="px-6 py-3 text-xs text-gray-600 dark:text-gray-400 italic">
+                                                            <span className="font-bold">Detail:</span> {row.dtl}
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                            </React.Fragment>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Risk Management */}
+                        <div className="bg-red-50 dark:bg-slate-800/50 p-6 rounded-xl shadow border-l-4 border-red-400">
+                            <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-red-700 dark:text-red-400"><SafeIcon name="Shield" /> {t.planning.riskTitle}</h3>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">{currentPlan.risk}</p>
                         </div>
                     </div>
                 );
@@ -831,7 +1268,7 @@
                             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition">
                                 {isMenuOpen ? <SafeIcon name="X" /> : <SafeIcon name="Menu" />}
                             </button>
-                            <div className="flex flex-col cursor-pointer" onClick={() => switchSection('overview')}>
+                            <div className="flex flex-col cursor-pointer" onClick={scrollToTop}>
                                 <span className="font-serif font-bold text-xl tracking-tight text-emerald-700 dark:text-emerald-400">{t.brand}</span>
                             </div>
                         </div>
@@ -854,7 +1291,6 @@
                                     {key==='learning' && <SafeIcon name="Layout" size={18}/>}
                                     {key==='combined' && <SafeIcon name="Briefcase" size={18}/>}
                                     {key==='planning' && <SafeIcon name="Target" size={18}/>}
-                                    {key==='history' && <SafeIcon name="Clock" size={18}/>}
                                     <span className="font-medium text-sm">{label}</span>
                                 </button>
                             ))}
@@ -866,38 +1302,11 @@
                         {activeSection === 'learning' && renderLearning()}
                         {activeSection === 'combined' && renderCombined()}
                         {activeSection === 'planning' && renderPlanning()}
-                        {activeSection === 'history' && (
-                             <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 animate-fade-in">
-                                 <div className="flex justify-between items-center mb-6">
-                                     <h3 className="text-xl font-bold flex items-center gap-2"><SafeIcon name="Clock" /> {t.history.title}</h3>
-                                     <button onClick={downloadHistory} className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 rounded hover:bg-slate-200 transition text-xs">
-                                         <SafeIcon name="Download" size={14} /> {t.history.exportBtn}
-                                     </button>
-                                 </div>
-                                 <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-slate-700">
-                                     <table className="w-full text-left text-sm">
-                                         <thead className="bg-gray-50 dark:bg-slate-900 font-bold">
-                                             <tr>{t.history.headers.map(h => <th key={h} className="px-4 py-3">{h}</th>)}</tr>
-                                         </thead>
-                                         <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
-                                             {history.map((h, i) => (
-                                                 <tr key={i} className="hover:bg-gray-50 dark:hover:bg-slate-700/50">
-                                                     <td className="px-4 py-3 font-mono text-xs text-gray-400">{h.time}</td>
-                                                     <td className="px-4 py-3"><span className="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-xs font-bold">{h.type}</span></td>
-                                                     <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{h.detail}</td>
-                                                 </tr>
-                                             ))}
-                                             {history.length===0 && <tr><td colSpan="3" className="p-8 text-center text-gray-400">No actions recorded yet.</td></tr>}
-                                         </tbody>
-                                     </table>
-                                 </div>
-                             </div>
-                        )}
                     </main>
 
                     <footer className="fixed bottom-0 w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 py-2 px-6 text-xs text-gray-500 flex justify-between items-center z-50">
                         <div className="flex gap-4">
-                            <span>{new Date().toLocaleDateString()} v2.0 Enhanced</span>
+                            <span>{new Date().toLocaleDateString()} v2.1 Ultimate</span>
                             <span>&copy; 2026 AI Strategy</span>
                         </div>
                         <a href="https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition font-bold flex items-center gap-1">
