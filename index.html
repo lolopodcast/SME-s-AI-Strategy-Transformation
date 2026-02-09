@@ -49,12 +49,17 @@
                         'flip': 'flip 0.6s preserve-3d',
                         'fade-in': 'fadeIn 0.5s ease-in-out',
                         'slide-up': 'slideUp 0.5s ease-out',
+                        'fade-in-right': 'fadeInRight 0.3s ease-out',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         fadeIn: {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' },
+                        },
+                        fadeInRight: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
                         },
                         slideUp: {
                             '0%': { transform: 'translateY(20px)', opacity: '0' },
@@ -246,10 +251,10 @@
                                 {f:"什麼是隱形冠軍？", b:"市佔高但低調的強者"}
                             ],
                             quiz: [
-                                {q:"台灣中小企業佔比約？", options:["50%","98%","30%"], ans:1},
-                                {q:"中小企業最佳 AI 策略？", options:["全面無人化","解決特定痛點","建立大型機房"], ans:1},
-                                {q:"隱形冠軍通常指？", options:["知名大企業","細分市場強者","新創公司"], ans:1},
-                                {q:"中小企業常見劣勢？", options:["決策慢","資金人才不足","組織僵化"], ans:1}
+                                {q:"台灣中小企業佔比約？", options:["50%","70%","98%","30%"], ans:2},
+                                {q:"中小企業最佳 AI 策略？", options:["全面無人化","建立大型機房","解決特定痛點","聘請百人團隊"], ans:2},
+                                {q:"隱形冠軍通常指？", options:["知名大企業","新創公司","細分市場強者","跨國集團"], ans:2},
+                                {q:"以下何者不是中小企業的典型優勢？", options:["決策彈性","市場反應快","資金雄厚","客製化能力"], ans:2}
                             ]
                         },
                         change: {
@@ -268,10 +273,10 @@
                                 {f:"3P 模型的三要素？", b:"Position, Process, People"}
                             ],
                             quiz: [
-                                {q:"3P 模型不包含？", options:["Product","People","Process"], ans:0},
-                                {q:"變革失敗最常見原因？", options:["技術太難","組織慣性","資金不足"], ans:1},
-                                {q:"Position 在 3P 中指？", options:["員工位置","策略定位","產品定位"], ans:1},
-                                {q:"如何減少變革疲勞？", options:["增加工作量","適當賦能與溝通","頻繁更換系統"], ans:1}
+                                {q:"3P 模型不包含？", options:["Position","Product","Process","People"], ans:1},
+                                {q:"變革失敗最常見原因？", options:["技術太難","資金不足","組織慣性","硬體老舊"], ans:2},
+                                {q:"Position 在 3P 中指？", options:["員工座位","產品定位","策略定位","市場份額"], ans:2},
+                                {q:"如何減少變革疲勞？", options:["增加工作量","頻繁更換系統","適當賦能與溝通","忽略員工感受"], ans:2}
                             ]
                         },
                         dx: {
@@ -290,10 +295,10 @@
                                 {f:"改變商業模式屬於？", b:"Digital Transformation (數位轉型)"}
                             ],
                             quiz: [
-                                {q:"商業模式的改變屬於？", options:["數位化","數位轉型","數位優化"], ans:1},
-                                {q:"工業 4.0 核心概念？", options:["CPS","大量生產","手工藝"], ans:0},
-                                {q:"紙本轉 PDF 是？", options:["Digitization","Digitalization","DX"], ans:0},
-                                {q:"利用數據改善流程是？", options:["Digitization","Digitalization","DX"], ans:1}
+                                {q:"商業模式的根本改變屬於？", options:["數位化","數位優化","數位轉型","工業 4.0"], ans:2},
+                                {q:"工業 4.0 核心概念？", options:["大量生產","手工藝","CPS 虛實整合","蒸汽機"], ans:2},
+                                {q:"紙本轉 PDF 屬於？", options:["Digitalization","DX","Digitization","CPS"], ans:2},
+                                {q:"利用數據改善流程效率是？", options:["Digitization","DX","Digitalization","CPS"], ans:2}
                             ]
                         },
                         ai: {
@@ -312,15 +317,15 @@
                                 {f:"Agentic AI 的特徵？", b:"自主設定目標與行動"}
                             ],
                             quiz: [
-                                {q:"能自主設定目標並執行的 AI？", options:["Chatbot","Agentic AI","GenAI"], ans:1},
-                                {q:"本計畫中 AI 的定位？", options:["取代人類","副駕駛 (擴增智慧)","全自動駕駛"], ans:1},
-                                {q:"創造新內容的 AI？", options:["Physical AI","Generative AI","Rule-based AI"], ans:1},
-                                {q:"AI 產生錯誤資訊稱為？", options:["Bug","Hallucination (幻覺)","Virus"], ans:1}
+                                {q:"能自主設定目標並執行的 AI？", options:["傳統規則式 AI","GenAI","Agentic AI","Physical AI"], ans:2},
+                                {q:"本計畫中 AI 的定位？", options:["取代人類","全自動駕駛","副駕駛 (擴增智慧)","純娛樂用途"], ans:2},
+                                {q:"能創造文字、圖片等新內容的 AI？", options:["Physical AI","Rule-based AI","Generative AI","Agentic AI"], ans:2},
+                                {q:"AI 產生看似合理但錯誤的資訊稱為？", options:["Bug","Virus","Hallucination (幻覺)","Overfitting"], ans:2}
                             ]
                         },
                         method: {
                             title: "AI 實施方法論 (CRISP-DM)",
-                            text: "AI 專案建議採用 CRISP-DM 標準流程：1. 商業理解 (定義問題與目標)；2. 數據理解 (盤點數據現狀)；3. 數據準備 (清洗與標註，通常佔 80% 時間)；4. 模型建立 (選擇演算法)；5. 評估 (驗證準確度與效益)；6. 部署 (上線與監控)。此外，應結合 Agile (敏捷開發) 思維，透過短週期的迭代 (Sprint) 快速驗證假設，避免長週期開發帶來的風險。",
+                            text: "AI 專案建議採用 CRISP-DM 標準流程：1. 商業理解 (定義問題與目標)；2. 數據理解 (盤點數據現狀)；3. 數據準備 (清洗與標註，通常佔 70-80% 時間)；4. 模型建立 (選擇演算法)；5. 評估 (驗證準確度與效益)；6. 部署 (上線與監控)。此外，應結合 Agile (敏捷開發) 思維，透過短週期的迭代 (Sprint) 快速驗證假設，避免長週期開發帶來的風險。",
                             terms: [
                                 {t:"CRISP-DM", d:"跨行業數據挖掘標準流程，包含六個階段。"},
                                 {t:"Agile", d:"敏捷開發：強調快速迭代、靈活應變的開發模式。"},
@@ -334,10 +339,10 @@
                                 {f:"敏捷開發的迭代單位？", b:"Sprint (衝刺)"}
                             ],
                             quiz: [
-                                {q:"驗證技術可行性的階段？", options:["POC","部署","維運"], ans:0},
-                                {q:"敏捷開發的核心？", options:["完整文件","快速迭代與回饋","嚴格合約"], ans:1},
-                                {q:"CRISP-DM 最耗時的階段？", options:["模型建立","數據準備","部署"], ans:1},
-                                {q:"商業理解的目標？", options:["定義問題與目標","清洗數據","購買硬體"], ans:0}
+                                {q:"驗證技術可行性的階段？", options:["部署","維運","POC (概念驗證)","商業理解"], ans:2},
+                                {q:"敏捷開發的核心？", options:["完整文件","嚴格合約","快速迭代與回饋","瀑布式流程"], ans:2},
+                                {q:"CRISP-DM 最耗時的階段？", options:["模型建立","部署","數據準備 (約佔 70-80%)","商業理解"], ans:2},
+                                {q:"商業理解的目標？", options:["清洗數據","購買硬體","定義問題與目標","訓練模型"], ans:2}
                             ]
                         },
                         data: {
@@ -356,10 +361,10 @@
                                 {f:"什麼是 Data Silo？", b:"數據孤島，部門間不流通"}
                             ],
                             quiz: [
-                                {q:"數據品質低落會導致？", options:["GIGO","效率提升","成本降低"], ans:0},
-                                {q:"確保數據一致性的策略？", options:["各部門獨立備份","建立 SSOT","加密數據"], ans:1},
-                                {q:"數據治理不包含？", options:["硬體維修","權限管理","隱私保護"], ans:0},
-                                {q:"部門間數據不流通稱為？", options:["數據湖","數據孤島","數據庫"], ans:1}
+                                {q:"數據品質低落會導致？", options:["效率提升","成本降低","GIGO (垃圾進垃圾出)","創新加速"], ans:2},
+                                {q:"確保數據一致性的策略？", options:["各部門獨立備份","加密數據","建立 SSOT","購買硬體"], ans:2},
+                                {q:"數據治理不包含？", options:["權限管理","隱私保護","硬體維修","數據標準"], ans:2},
+                                {q:"部門間數據不流通稱為？", options:["數據湖","數據庫","數據孤島 (Data Silo)","數據倉儲"], ans:2}
                             ]
                         },
                         roi: {
@@ -378,10 +383,10 @@
                                 {f:"ROI 計算核心？", b:"(效益 - 成本) / 成本"}
                             ],
                             quiz: [
-                                {q:"TCO 代表？", options:["總營收","總體擁有成本","技術長"], ans:1},
-                                {q:"預測準確率屬於哪類 KPI？", options:["效率指標","品質指標","財務指標"], ans:1},
-                                {q:"品牌形象提升屬於？", options:["有形效益","無形效益 (Soft Benefits)","沈沒成本"], ans:1},
-                                {q:"評估 AI 效益應考慮？", options:["僅財務回報","財務與無形效益","僅技術先進度"], ans:1}
+                                {q:"TCO 代表？", options:["總營收","技術長","總體擁有成本","營業利潤"], ans:2},
+                                {q:"預測準確率屬於哪類 KPI？", options:["效率指標","財務指標","品質指標","營運指標"], ans:2},
+                                {q:"品牌形象提升屬於？", options:["有形效益","沈沒成本","無形效益 (Soft Benefits)","營運支出"], ans:2},
+                                {q:"評估 AI 效益應考慮？", options:["僅財務回報","僅技術先進度","財務與無形效益兼顧","僅品牌形象"], ans:2}
                             ]
                         },
                         tactic: {
@@ -400,10 +405,10 @@
                                 {f:"ADKAR 模型起點？", b:"Awareness (認知)"}
                             ],
                             quiz: [
-                                {q:"增強信心的最佳戰術？", options:["畫大餅","創造短期戰果 (Quick Wins)","強制命令"], ans:1},
-                                {q:"ADKAR 的 A 代表？", options:["Awareness (認知)","Action","AI"], ans:0},
-                                {q:"賦能 (Empowerment) 意指？", options:["給予更多工作","提供技能與資源","減少薪資"], ans:1},
-                                {q:"變革管理的目的？", options:["購買軟體","確保技術落地與人員適應","增加管理層"], ans:1}
+                                {q:"增強信心的最佳戰術？", options:["畫大餅","強制命令","創造短期戰果 (Quick Wins)","忽略反對"], ans:2},
+                                {q:"ADKAR 的 A 代表？", options:["Action","AI","Awareness (認知)","Ability"], ans:2},
+                                {q:"賦能 (Empowerment) 意指？", options:["給予更多工作","減少薪資","提供技能與資源","強制加班"], ans:2},
+                                {q:"變革管理的目的？", options:["購買軟體","增加管理層","確保技術落地與人員適應","削減人力"], ans:2}
                             ]
                         },
                         talent: {
@@ -422,10 +427,10 @@
                                 {f:"什麼是 Prompt Engineering？", b:"設計指令引導 AI"}
                             ],
                             quiz: [
-                                {q:"連接業務與技術的角色？", options:["工程師","AI Translator","專案經理"], ans:1},
-                                {q:"讓員工適應新職位的訓練？", options:["Onboarding","Reskilling","Upskilling"], ans:1},
-                                {q:"在原職位提升技能？", options:["Upskilling","Reskilling","Hiring"], ans:0},
-                                {q:"引導 AI 生成結果的技能？", options:["Coding","Prompt Engineering","Data Entry"], ans:1}
+                                {q:"連接業務與技術的橋樑角色？", options:["工程師","專案經理","AI Translator","資料庫管理員"], ans:2},
+                                {q:"讓員工適應新職位的訓練？", options:["Onboarding","Upskilling","Reskilling","Offboarding"], ans:2},
+                                {q:"在原職位上提升技能稱為？", options:["Reskilling","Hiring","Upskilling","Offboarding"], ans:2},
+                                {q:"引導 AI 生成預期結果的技能？", options:["Coding","Data Entry","Prompt Engineering","Hardware Repair"], ans:2}
                             ]
                         },
                         ethics: {
@@ -444,10 +449,10 @@
                                 {f:"Responsible AI 目標？", b:"安全、可信、合規"}
                             ],
                             quiz: [
-                                {q:"讓人類理解 AI 決策過程？", options:["黑箱測試","XAI","深度學習"], ans:1},
-                                {q:"負責任 AI 的核心？", options:["速度最快","合規、公平、透明","成本最低"], ans:1},
-                                {q:"AI 放大社會偏見稱為？", options:["Bias (偏見)","Bug","Feature"], ans:0},
-                                {q:"確保數據隱私的法規？", options:["ISO 9001","GDPR","SOP"], ans:1}
+                                {q:"讓人類理解 AI 決策過程的技術？", options:["黑箱測試","深度學習","XAI (可解釋 AI)","強化學習"], ans:2},
+                                {q:"負責任 AI 的核心？", options:["速度最快","成本最低","合規、公平、透明","功能最多"], ans:2},
+                                {q:"AI 放大社會偏見稱為？", options:["Bug","Feature","Algorithmic Bias (演算法偏見)","Hallucination"], ans:2},
+                                {q:"歐盟確保數據隱私的法規？", options:["ISO 9001","SOP","GDPR","CRISP-DM"], ans:2}
                             ]
                         }
                     }
@@ -550,10 +555,10 @@
                                 {f:"Hidden Champions mean?", b:"Niche market leaders"}
                             ],
                             quiz: [
-                                {q:"SME % in Taiwan?", options:["50%","98%","30%"], ans:1},
-                                {q:"Priority strategy?", options:["Full Automation","Solve Pain Points","Buy Hardware"], ans:1},
-                                {q:"Typical SME weakness?", options:["Speed","Resources","Agility"], ans:1},
-                                {q:"Quick Wins help to?", options:["Waste money","Build confidence","Increase complexity"], ans:1}
+                                {q:"SME % in Taiwan?", options:["50%","70%","98%","30%"], ans:2},
+                                {q:"Priority strategy?", options:["Full Automation","Buy Hardware","Solve Pain Points","Hire PhDs"], ans:2},
+                                {q:"NOT a typical SME advantage?", options:["Speed","Agility","Limited Resources","Flexibility"], ans:2},
+                                {q:"Quick Wins help to?", options:["Waste money","Increase complexity","Build confidence","Slow down"], ans:2}
                             ]
                         },
                         change: {
@@ -572,10 +577,10 @@
                                 {f:"Position in 3P?", b:"Strategy & Goals"}
                             ],
                             quiz: [
-                                {q:"Not a P?", options:["Product","People","Process"], ans:0},
-                                {q:"Biggest enemy?", options:["Money","Inertia","Hardware"], ans:1},
-                                {q:"How to fix Inertia?", options:["Ignore it","Change Management","Fire everyone"], ans:1},
-                                {q:"Empowerment involves?", options:["Training & Tools","Micro-management","Less pay"], ans:0}
+                                {q:"Not a P in 3P?", options:["People","Process","Product","Position"], ans:2},
+                                {q:"Biggest enemy of change?", options:["Money","Hardware","Org Inertia","Software"], ans:2},
+                                {q:"How to fix Inertia?", options:["Ignore it","Fire everyone","Change Management","More meetings"], ans:2},
+                                {q:"Empowerment involves?", options:["Micro-management","Less pay","Training & Tools","More control"], ans:2}
                             ]
                         },
                         dx: {
@@ -594,10 +599,10 @@
                                 {f:"Biz Model Change?", b:"Digital Transformation"}
                             ],
                             quiz: [
-                                {q:"Business Model change?", options:["Digitization","DX","Digitalization"], ans:1},
-                                {q:"Ind 4.0 Core?", options:["CPS","IoT","AI"], ans:0},
-                                {q:"Paper to Digital?", options:["Digitization","Digitalization","DX"], ans:0},
-                                {q:"Process Optimization?", options:["Digitization","Digitalization","DX"], ans:1}
+                                {q:"Business Model change?", options:["Digitization","Digitalization","DX","CPS"], ans:2},
+                                {q:"Ind 4.0 Core?", options:["IoT","AI","CPS","Big Data"], ans:2},
+                                {q:"Paper to Digital?", options:["Digitalization","DX","Digitization","CPS"], ans:2},
+                                {q:"Process Optimization?", options:["Digitization","DX","Digitalization","CPS"], ans:2}
                             ]
                         },
                         ai: {
@@ -616,15 +621,15 @@
                                 {f:"Autonomous Goal Setting?", b:"Agentic AI"}
                             ],
                             quiz: [
-                                {q:"Autonomous AI?", options:["Chatbot","Agentic AI","GenAI"], ans:1},
-                                {q:"AI Role?", options:["Replace Human","Co-pilot","Toy"], ans:1},
-                                {q:"AI creating art?", options:["Physical AI","Generative AI","Old AI"], ans:1},
-                                {q:"Fake facts from AI?", options:["Truth","Hallucination","Data"], ans:1}
+                                {q:"Autonomous AI?", options:["Rule-based AI","GenAI","Agentic AI","Physical AI"], ans:2},
+                                {q:"AI Role in this plan?", options:["Replace Human","Toy","Co-pilot (Augmented Intelligence)","Full Autopilot"], ans:2},
+                                {q:"AI creating new content?", options:["Physical AI","Rule-based AI","Generative AI","Agentic AI"], ans:2},
+                                {q:"Fake facts from AI?", options:["Truth","Data","Hallucination","Overfitting"], ans:2}
                             ]
                         },
                         method: {
                             title: "Implementation Methodology (CRISP-DM)",
-                            text: "We follow the CRISP-DM standard: 1. Business Understanding (Define goals), 2. Data Understanding, 3. Data Preparation (Cleaning/Labeling - takes 80% of time), 4. Modeling, 5. Evaluation, 6. Deployment. This is combined with Agile methodology, using short 'Sprints' to iterate and validate models quickly. This approach reduces the risk of building a large system that doesn't fit user needs or market reality.",
+                            text: "We follow the CRISP-DM standard: 1. Business Understanding (Define goals), 2. Data Understanding, 3. Data Preparation (Cleaning/Labeling - takes 70-80% of time), 4. Modeling, 5. Evaluation, 6. Deployment. This is combined with Agile methodology, using short 'Sprints' to iterate and validate models quickly. This approach reduces the risk of building a large system that doesn't fit user needs or market reality.",
                             terms: [
                                 {t:"CRISP-DM", d:"Cross-Industry Standard Process for Data Mining."},
                                 {t:"Agile", d:"Iterative development approach focusing on flexibility."},
@@ -638,10 +643,10 @@
                                 {f:"Agile unit?", b:"Sprint"}
                             ],
                             quiz: [
-                                {q:"First step of CRISP-DM?", options:["Data","Business","Model"], ans:1},
-                                {q:"Agile core?", options:["Docs","Iterations","Contracts"], ans:1},
-                                {q:"Longest phase?", options:["Modeling","Data Prep","Deployment"], ans:1},
-                                {q:"Why Agile?", options:["Slow & Steady","Fast & Flexible","Rigid"], ans:1}
+                                {q:"First step of CRISP-DM?", options:["Data Prep","Modeling","Business Understanding","Deployment"], ans:2},
+                                {q:"Agile core?", options:["Docs","Contracts","Fast Iterations","Waterfall"], ans:2},
+                                {q:"Longest phase?", options:["Modeling","Deployment","Data Prep (70-80%)","Evaluation"], ans:2},
+                                {q:"Why Agile?", options:["Slow & Steady","Rigid","Fast & Flexible","Cheaper"], ans:2}
                             ]
                         },
                         data: {
@@ -660,10 +665,10 @@
                                 {f:"Data Governance?", b:"Managing data quality & security"}
                             ],
                             quiz: [
-                                {q:"Poor data leads to?", options:["GIGO","Success","Savings"], ans:0},
-                                {q:"Solving Silos?", options:["Encryption","SSOT","Isolation"], ans:1},
-                                {q:"Single Source of Truth?", options:["One boss","Unified Data","One computer"], ans:1},
-                                {q:"Governance involves?", options:["Hardware","Security & Quality","Parties"], ans:1}
+                                {q:"Poor data leads to?", options:["Success","Savings","GIGO","Innovation"], ans:2},
+                                {q:"Solving Silos?", options:["Encryption","Isolation","SSOT","More Silos"], ans:2},
+                                {q:"Single Source of Truth means?", options:["One boss","One computer","Unified Data","One server"], ans:2},
+                                {q:"Governance involves?", options:["Hardware only","Parties","Security & Quality","Marketing"], ans:2}
                             ]
                         },
                         roi: {
@@ -682,10 +687,10 @@
                                 {f:"Efficiency KPI?", b:"Time or Cost reduction"}
                             ],
                             quiz: [
-                                {q:"TCO means?", options:["Revenue","Total Cost","CTO"], ans:1},
-                                {q:"Yield rate is?", options:["Efficiency","Quality","Financial"], ans:1},
-                                {q:"Intangible benefit?", options:["Cash","Soft Benefit","Hard Benefit"], ans:1},
-                                {q:"ROI Formula?", options:["Cost/Profit","(Profit-Cost)/Cost","Profit+Cost"], ans:1}
+                                {q:"TCO means?", options:["Revenue","CTO","Total Cost of Ownership","Profit"], ans:2},
+                                {q:"Yield rate is what type of KPI?", options:["Efficiency","Financial","Quality","Operational"], ans:2},
+                                {q:"Intangible benefit?", options:["Cash","Hard Benefit","Soft Benefit","Revenue"], ans:2},
+                                {q:"ROI Formula?", options:["Cost/Profit","Profit+Cost","(Profit-Cost)/Cost","Profit-Cost"], ans:2}
                             ]
                         },
                         tactic: {
@@ -704,10 +709,10 @@
                                 {f:"Kotter's 1st step?", b:"Create Urgency"}
                             ],
                             quiz: [
-                                {q:"Tactic for confidence?", options:["Promises","Quick Wins","More Work"], ans:1},
-                                {q:"'A' in ADKAR?", options:["Awareness","Action","AI"], ans:0},
-                                {q:"Empowerment?", options:["Training","Firing","Ignoring"], ans:0},
-                                {q:"Kotter Step 1?", options:["Vision","Urgency","Wins"], ans:1}
+                                {q:"Tactic for confidence?", options:["Promises","More Work","Quick Wins","Threats"], ans:2},
+                                {q:"'A' in ADKAR?", options:["Action","AI","Awareness","Ability"], ans:2},
+                                {q:"Empowerment means?", options:["Firing","Ignoring","Training & Resources","Micromanaging"], ans:2},
+                                {q:"Kotter Step 1?", options:["Vision","Wins","Create Urgency","Empower"], ans:2}
                             ]
                         },
                         talent: {
@@ -726,10 +731,10 @@
                                 {f:"Prompt Engineering?", b:"Guiding AI Output"}
                             ],
                             quiz: [
-                                {q:"Role linking biz & tech?", options:["Coder","AI Translator","PM"], ans:1},
-                                {q:"Training for new role?", options:["Onboarding","Reskilling","Upskilling"], ans:1},
-                                {q:"Training for current role?", options:["Reskilling","Upskilling","Hiring"], ans:1},
-                                {q:"Guiding AI?", options:["Prompt Eng","Coding","Clicking"], ans:0}
+                                {q:"Role linking biz & tech?", options:["Coder","PM","AI Translator","DBA"], ans:2},
+                                {q:"Training for new role?", options:["Onboarding","Upskilling","Reskilling","Offboarding"], ans:2},
+                                {q:"Training for current role?", options:["Reskilling","Hiring","Upskilling","Offboarding"], ans:2},
+                                {q:"Guiding AI output?", options:["Coding","Clicking","Prompt Engineering","Data Entry"], ans:2}
                             ]
                         },
                         ethics: {
@@ -748,10 +753,10 @@
                                 {f:"Responsible AI?", b:"Ethical & Safe"}
                             ],
                             quiz: [
-                                {q:"Understanding AI decisions?", options:["Blackbox","XAI","Deep Learning"], ans:1},
-                                {q:"Responsible AI focus?", options:["Speed","Trust & Fairness","Cost"], ans:1},
-                                {q:"Bias in AI?", options:["Good","Bad/Unfair","Neutral"], ans:1},
-                                {q:"GDPR protects?", options:["Profits","Data Privacy","Algorithms"], ans:1}
+                                {q:"Understanding AI decisions?", options:["Blackbox","Deep Learning","XAI","Reinforcement Learning"], ans:2},
+                                {q:"Responsible AI focus?", options:["Speed","Cost","Trust & Fairness","Features"], ans:2},
+                                {q:"Algorithmic Bias is?", options:["Good","Neutral","Systematic Unfairness","Feature"], ans:2},
+                                {q:"GDPR protects?", options:["Profits","Algorithms","Data Privacy","Hardware"], ans:2}
                             ]
                         }
                     }
@@ -809,7 +814,7 @@
         const FlipCard = ({ front, back }) => {
             const [flipped, setFlipped] = useState(false);
             return (
-                <div className="group w-full h-32 [perspective:1000px] cursor-pointer" onClick={() => setFlipped(!flipped)}>
+                <div className="group w-full h-36 [perspective:1000px] cursor-pointer" onClick={() => setFlipped(!flipped)}>
                     <div className={`relative w-full h-full transition-all duration-500 [transform-style:preserve-3d] ${flipped ? '[transform:rotateY(180deg)]' : ''}`}>
                         <div className="absolute inset-0 bg-white dark:bg-slate-800 border-2 border-emerald-100 dark:border-slate-700 rounded-xl p-4 flex items-center justify-center text-center shadow-sm [backface-visibility:hidden] hover:border-emerald-400 transition-colors">
                             <p className="font-bold text-emerald-800 dark:text-emerald-400 text-sm">{front}</p>
@@ -884,7 +889,8 @@
                         })}
                     </div>
                     {selected !== null && (
-                        <div className="mt-3 flex justify-end">
+                        <div className="mt-3 flex justify-between items-center">
+                            <span className={`text-xs font-bold ${isCorrect ? 'text-emerald-600' : 'text-red-500'}`}>{isCorrect ? texts.correct : texts.wrong}</span>
                             <button onClick={handleNext} className="px-3 py-1 bg-slate-800 text-white rounded text-xs hover:bg-slate-700 flex items-center gap-1">
                                 {texts.next} <SafeIcon name="ArrowRight" size={12} />
                             </button>
@@ -1241,44 +1247,85 @@
             const renderPlanning = () => {
                 if (!selectedIndustry) return <div className="text-center p-12 text-gray-400 border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl">{t.combined.selectPrompt}</div>;
                 
-                const plans = {
-                    machining: {
-                        obj: ["建立產能透明化系統", "提升報價精準度至 95%", "降低排程衝突 50%"],
-                        rows: [
-                            { ph: "1. Foundation", tm: "M1-3", act: "IoT 數據採集、報價數據清洗", dtl: "安裝機台三色燈感測器，建立報價歷史資料庫。", kpi: "Quote Search -30%", res: "Data Eng (40%)" },
-                            { ph: "2. Process", tm: "M4-8", act: "APS 排程系統導入", dtl: "串接 ERP 與 MES，導入自動化排程演算法。", kpi: "On-time 85%", res: "Software (30%)" },
-                            { ph: "3. AI Scale", tm: "M9-12", act: "AI 輔助估價模型", dtl: "基於歷史成本與工時，自動推薦報價區間。", kpi: "Margin +15%", res: "Change Mgmt (20%)" }
-                        ],
-                        risk: "現場人員抗拒數位回報 (對策：簡化介面、獎勵機制)"
+                const plansData = {
+                    TC: {
+                        machining: {
+                            obj: ["建立產能透明化系統", "提升報價精準度至 95%", "降低排程衝突 50%"],
+                            rows: [
+                                { ph: "1. 數位地基", tm: "M1-3", act: "IoT 數據採集、報價數據清洗", dtl: "安裝機台三色燈感測器，建立報價歷史資料庫。", kpi: "報價查找 -30%", res: "數據工程 (40%)" },
+                                { ph: "2. 流程改善", tm: "M4-8", act: "APS 排程系統導入", dtl: "串接 ERP 與 MES，導入自動化排程演算法。", kpi: "準時交付 85%", res: "軟體設施 (30%)" },
+                                { ph: "3. AI 擴展", tm: "M9-12", act: "AI 輔助估價模型", dtl: "基於歷史成本與工時，自動推薦報價區間。", kpi: "毛利 +15%", res: "變革管理 (20%)" }
+                            ],
+                            risk: "現場人員抗拒數位回報 (對策：簡化介面、獎勵機制)"
+                        },
+                        retail: {
+                            obj: ["最佳化庫存管理", "提升會員回購率", "降低報廢成本"],
+                            rows: [
+                                { ph: "1. 數位地基", tm: "M1-3", act: "POS/ERP 整合、天氣資料庫", dtl: "打通銷售與庫存數據，引入氣象因子。", kpi: "缺貨率 -10%", res: "數據工程 (40%)" },
+                                { ph: "2. 流程改善", tm: "M4-8", act: "銷量預測與排班優化", dtl: "建立機器學習模型預測單店日銷量。", kpi: "報廢 -20%", res: "軟體設施 (30%)" },
+                                { ph: "3. AI 擴展", tm: "M9-12", act: "動態定價 (Dynamic Pricing)", dtl: "針對即期品自動生成最佳折扣。", kpi: "營收 +10%", res: "變革管理 (20%)" }
+                            ],
+                            risk: "門市人員操作不規範 (對策：防呆設計、教育訓練)"
+                        },
+                        healthcare: {
+                            obj: ["縮短病患候診時間", "提升診斷輔助效率", "確保數據合規"],
+                            rows: [
+                                { ph: "1. 數位地基", tm: "M1-3", act: "HIS 數據清洗、隱私合規盤點", dtl: "去除個資 (De-identification)，建立標準化數據集。", kpi: "數據錯誤 -50%", res: "數據工程 (40%)" },
+                                { ph: "2. 流程改善", tm: "M4-8", act: "病患流動預測、智慧分流", dtl: "預測各科室尖峰時段，動態調整人力。", kpi: "候診時間 -30%", res: "軟體設施 (30%)" },
+                                { ph: "3. AI 擴展", tm: "M9-12", act: "AI 影像輔助診斷", dtl: "導入 X 光/CT 初篩模型，輔助醫師判讀。", kpi: "診斷速度 +40%", res: "變革管理 (20%)" }
+                            ],
+                            risk: "數據隱私洩漏 (對策：地端部署、聯邦學習)"
+                        },
+                        agriculture: {
+                            obj: ["精準預測產量", "降低農藥與水資源浪費", "自動化監控"],
+                            rows: [
+                                { ph: "1. 數位地基", tm: "M1-3", act: "微氣候感測器佈建", dtl: "安裝土壤溫濕度、光照感測器，建立數據站。", kpi: "數據覆蓋 100%", res: "數據工程 (40%)" },
+                                { ph: "2. 流程改善", tm: "M4-8", act: "自動灌溉與病蟲害警示", dtl: "根據感測數據自動控制水閥，影像辨識病蟲害。", kpi: "用水量 -20%", res: "軟體設施 (30%)" },
+                                { ph: "3. AI 擴展", tm: "M9-12", act: "產量預測模型", dtl: "結合歷史氣候與收成數據，預估最佳採收期。", kpi: "產量 +15%", res: "變革管理 (20%)" }
+                            ],
+                            risk: "硬體設備戶外損壞 (對策：選用工業級防護設備)"
+                        }
                     },
-                    retail: {
-                        obj: ["最佳化庫存管理", "提升會員回購率", "降低報廢成本"],
-                        rows: [
-                            { ph: "1. Foundation", tm: "M1-3", act: "POS/ERP 整合、天氣資料庫", dtl: "打通銷售與庫存數據，引入氣象因子。", kpi: "Stockout -10%", res: "Data Eng (40%)" },
-                            { ph: "2. Process", tm: "M4-8", act: "銷量預測與排班優化", dtl: "建立機器學習模型預測單店日銷量。", kpi: "Waste -20%", res: "Software (30%)" },
-                            { ph: "3. AI Scale", tm: "M9-12", act: "動態定價 (Dynamic Pricing)", dtl: "針對即期品自動生成最佳折扣。", kpi: "Rev +10%", res: "Change Mgmt (20%)" }
-                        ],
-                        risk: "門市人員操作不規範 (對策：防呆設計、教育訓練)"
-                    },
-                    healthcare: {
-                        obj: ["縮短病患候診時間", "提升診斷輔助效率", "確保數據合規"],
-                        rows: [
-                            { ph: "1. Foundation", tm: "M1-3", act: "HIS 數據清洗、隱私合規盤點", dtl: "去除個資 (De-identification)，建立標準化數據集。", kpi: "Data Err -50%", res: "Data Eng (40%)" },
-                            { ph: "2. Process", tm: "M4-8", act: "病患流動預測、智慧分流", dtl: "預測各科室尖峰時段，動態調整人力。", kpi: "Wait Time -30%", res: "Software (30%)" },
-                            { ph: "3. AI Scale", tm: "M9-12", act: "AI 影像輔助診斷", dtl: "導入 X 光/CT 初篩模型，輔助醫師判讀。", kpi: "Diag Speed +40%", res: "Change Mgmt (20%)" }
-                        ],
-                        risk: "數據隱私洩漏 (對策：地端部署、聯邦學習)"
-                    },
-                    agriculture: {
-                        obj: ["精準預測產量", "降低農藥與水資源浪費", "自動化監控"],
-                        rows: [
-                            { ph: "1. Foundation", tm: "M1-3", act: "微氣候感測器佈建", dtl: "安裝土壤溫濕度、光照感測器，建立數據站。", kpi: "Data Cov 100%", res: "Data Eng (40%)" },
-                            { ph: "2. Process", tm: "M4-8", act: "自動灌溉與病蟲害警示", dtl: "根據感測數據自動控制水閥，影像辨識病蟲害。", kpi: "Water -20%", res: "Software (30%)" },
-                            { ph: "3. AI Scale", tm: "M9-12", act: "產量預測模型", dtl: "結合歷史氣候與收成數據，預估最佳採收期。", kpi: "Yield +15%", res: "Change Mgmt (20%)" }
-                        ],
-                        risk: "硬體設備戶外損壞 (對策：選用工業級防護設備)"
+                    EN: {
+                        machining: {
+                            obj: ["Build capacity transparency system", "Improve quote accuracy to 95%", "Reduce scheduling conflicts by 50%"],
+                            rows: [
+                                { ph: "1. Foundation", tm: "M1-3", act: "IoT data collection, quote DB cleanup", dtl: "Install machine signal sensors, build historical quote database.", kpi: "Quote Search -30%", res: "Data Eng (40%)" },
+                                { ph: "2. Process", tm: "M4-8", act: "APS scheduling system", dtl: "Integrate ERP & MES, deploy automated scheduling algorithms.", kpi: "On-time 85%", res: "Software (30%)" },
+                                { ph: "3. AI Scale", tm: "M9-12", act: "AI-assisted quoting model", dtl: "Auto-recommend quote ranges based on historical cost & hours.", kpi: "Margin +15%", res: "Change Mgmt (20%)" }
+                            ],
+                            risk: "Shop floor resistance to digital reporting (Mitigation: Simplified UI, incentive programs)"
+                        },
+                        retail: {
+                            obj: ["Optimize inventory management", "Increase member repurchase rate", "Reduce waste costs"],
+                            rows: [
+                                { ph: "1. Foundation", tm: "M1-3", act: "POS/ERP integration, weather DB", dtl: "Connect sales & inventory data, introduce weather factors.", kpi: "Stockout -10%", res: "Data Eng (40%)" },
+                                { ph: "2. Process", tm: "M4-8", act: "Sales forecasting & shift optimization", dtl: "Build ML model to predict daily store-level sales.", kpi: "Waste -20%", res: "Software (30%)" },
+                                { ph: "3. AI Scale", tm: "M9-12", act: "Dynamic Pricing", dtl: "Auto-generate optimal discounts for near-expiry items.", kpi: "Revenue +10%", res: "Change Mgmt (20%)" }
+                            ],
+                            risk: "Store staff non-compliance (Mitigation: Fool-proof design, training)"
+                        },
+                        healthcare: {
+                            obj: ["Reduce patient wait times", "Improve diagnostic efficiency", "Ensure data compliance"],
+                            rows: [
+                                { ph: "1. Foundation", tm: "M1-3", act: "HIS data cleanup, privacy audit", dtl: "De-identification of PII, build standardized datasets.", kpi: "Data Errors -50%", res: "Data Eng (40%)" },
+                                { ph: "2. Process", tm: "M4-8", act: "Patient flow prediction, smart triage", dtl: "Predict peak hours per department, dynamically adjust staffing.", kpi: "Wait Time -30%", res: "Software (30%)" },
+                                { ph: "3. AI Scale", tm: "M9-12", act: "AI-assisted image diagnosis", dtl: "Deploy X-ray/CT screening models to assist physicians.", kpi: "Diag Speed +40%", res: "Change Mgmt (20%)" }
+                            ],
+                            risk: "Data privacy breach (Mitigation: On-premise deployment, Federated Learning)"
+                        },
+                        agriculture: {
+                            obj: ["Predict crop yield accurately", "Reduce pesticide & water waste", "Automate monitoring"],
+                            rows: [
+                                { ph: "1. Foundation", tm: "M1-3", act: "Micro-climate sensor deployment", dtl: "Install soil moisture, temperature & light sensors.", kpi: "Data Coverage 100%", res: "Data Eng (40%)" },
+                                { ph: "2. Process", tm: "M4-8", act: "Auto-irrigation & pest alerts", dtl: "Sensor-driven valve control, image-based pest detection.", kpi: "Water -20%", res: "Software (30%)" },
+                                { ph: "3. AI Scale", tm: "M9-12", act: "Yield prediction model", dtl: "Combine historical climate & harvest data to predict optimal harvest.", kpi: "Yield +15%", res: "Change Mgmt (20%)" }
+                            ],
+                            risk: "Outdoor hardware damage (Mitigation: Industrial-grade weatherproof equipment)"
+                        }
                     }
                 };
+                const plans = plansData[lang];
                 const currentPlan = plans[selectedIndustry];
 
                 return (
@@ -1377,14 +1424,14 @@
                         </div>
                     )}
 
-                    <main className="flex-1 pt-24 pb-20 px-4 md:px-8 max-w-6xl mx-auto w-full">
+                    <main className="flex-1 pt-24 pb-8 px-4 md:px-8 max-w-6xl mx-auto w-full">
                         {activeSection === 'overview' && renderOverview()}
                         {activeSection === 'learning' && renderLearning()}
                         {activeSection === 'combined' && renderCombined()}
                         {activeSection === 'planning' && renderPlanning()}
                     </main>
 
-                    <footer className="fixed bottom-0 w-full bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 py-2 px-6 text-xs text-gray-500 flex justify-between items-center z-50">
+                    <footer className="bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800 py-3 px-6 text-xs text-gray-500 flex justify-between items-center">
                         <div className="flex gap-4">
                             <span>{new Date().toLocaleDateString()} v2.1 Ultimate</span>
                             <span>&copy; 2026 AI Strategy</span>
