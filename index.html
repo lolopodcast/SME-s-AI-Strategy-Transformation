@@ -51,7 +51,7 @@
         ::-webkit-scrollbar-thumb { background: #004537; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fadeIn { animation: fadeIn 0.5s ease-in-out; }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
         
         /* 版面修正 */
         .fixed-header { height: 64px; }
@@ -172,19 +172,19 @@
             );
         };
 
-        // --- 內容數據 (全面雙語化對應) ---
+        // --- 內容數據 ---
         const CONTENT = {
             TC: {
                 brand: "AIST",
                 title: "AI 導入與組織變革",
                 nav: [
-                    "0. 執行概要", "1. 中小企業特性", "2. 3P 變革模型", "3. 數位轉型層次", 
+                    "0. 執行概要", 
+                    "1. 中小企業特性", "2. 3P 變革模型", "3. 數位轉型層次", 
                     "4. AI 分類定義", "5. 實施方法論", "6. 數據與 ROI", 
                     "7. 互動實驗室", "8. 外部資源", "9. 學習歷程"
                 ],
                 unit0: {
-                    summary: "本課程旨在探討中小企業如何透過 AI 驅動組織轉型。在全球數位化浪潮下，台灣中小企業（SME）面臨傳承斷層與數位落差。我們提出的「擴增智慧」架構，強調 AI 作為人類決策的副駕駛。透過 3P 模型（定位、流程、人）的協調，企業能從依賴直覺的經營轉向數據驅動。本教材將系統化介紹導入策略、CRISP-DM 方法論及變革戰術，協助建立具備競爭力的 AI 體系。",
-                    blocks: ["單元 1", "單元 2", "單元 3", "單元 4", "單元 5", "單元 6", "實驗室", "資源", "歷程"]
+                    summary: "本課程旨在探討中小企業如何透過 AI 驅動組織轉型。在全球數位化浪潮下，台灣中小企業（SME）面臨傳承斷層與數位落差。我們提出的「擴增智慧」架構，強調 AI 作為人類決策的副駕駛。透過 3P 模型（定位、流程、人）的協調，企業能從依賴直覺的經營轉向數據驅動。本教材將系統化介紹導入策略、CRISP-DM 方法論及變革戰術，協助建立具備競爭力的 AI 體系。"
                 },
                 common: {
                     next: "下一單元", prev: "上一單元", architect: "設計者", top: "頂端", 
@@ -199,13 +199,13 @@
                 brand: "AIST",
                 title: "AI Strategy & Org Transformation",
                 nav: [
-                    "0. Executive Summary", "1. SME Characteristics", "2. 3P Change Model", "3. DX Levels", 
+                    "0. Executive Summary", 
+                    "1. SME Characteristics", "2. 3P Change Model", "3. DX Levels", 
                     "4. AI Definitions", "5. Methodology", "6. Data & ROI", 
                     "7. Interactive Lab", "8. External Resources", "9. Learning Analytics"
                 ],
                 unit0: {
-                    summary: "This course explores how SMEs leverage AI for organizational transformation. In the digital age, Taiwan's SMEs face challenges like succession gaps and digital divides. Our 'Augmented Intelligence' framework emphasizes AI as a co-pilot for human decision-making. Through the 3P model (Position, Process, People), enterprises shift from intuition-based to data-driven operations. This material systematically introduces adoption strategies, CRISP-DM methodology, and change tactics to build a competitive AI-enabled system.",
-                    blocks: ["Unit 1", "Unit 2", "Unit 3", "Unit 4", "Unit 5", "Unit 6", "Lab", "Resources", "Analytics"]
+                    summary: "This course explores how SMEs leverage AI for organizational transformation. In the digital age, Taiwan's SMEs face challenges like succession gaps and digital divides. Our 'Augmented Intelligence' framework emphasizes AI as a co-pilot for human decision-making. Through the 3P model (Position, Process, People), enterprises shift from intuition-based to data-driven operations. This material systematically introduces adoption strategies, CRISP-DM methodology, and change tactics to build a competitive AI-enabled system."
                 },
                 common: {
                     next: "Next Theme", prev: "Previous Theme", architect: "Architect", top: "Top", 
@@ -218,40 +218,134 @@
             }
         };
 
-        // --- 主題單元數據 (Units 1-6) - 落實全面雙語化 ---
+        // --- 主題單元數據 (Units 1-6 完整獨立資料，確保切換時畫面有更新) ---
         const UNIT_DATA = {
             1: {
                 title: { TC: "中小企業 (SME) 的特性與挑戰", EN: "SME Characteristics & Challenges" },
                 deepDive: {
-                    TC: "台灣中小企業佔企業總數 98%，具備高度決策彈性。然而，資源限制是主要痛點。導入 AI 時不應追求大規模改進，而應尋找能產生即時效益的「速贏」(Quick Win) 項目。這有助於緩解對技術的不安全感。",
+                    TC: "台灣中小企業佔企業總數約 98%，具備高度的決策彈性與市場反應速度。然而，資源限制、傳承斷層是主要痛點。導入 AI 時不應追求大規模改進，而應尋找能產生即時效益的「速贏」(Quick Win) 項目，這有助於建立團隊信心。",
                     EN: "SMEs represent 98% of businesses in Taiwan, offering agility. However, resource constraints are key pain points. AI adoption should focus on 'Quick Wins' rather than large-scale overhaul to build confidence and mitigate technical insecurity."
                 },
                 cards: {
                     TC: [
                         { f: "SME 最大優勢", b: "極高的決策彈性與市場反應速度" },
-                        { f: "隱形冠軍 (Hidden Champions)", b: "在細分市場佔有率極高但低調的強者" },
-                        { f: "數位落差 (Digital Divide)", b: "企業間因數位技術應用能力不同產生的差距" },
                         { f: "速贏 (Quick Win)", b: "低成本、高能見度，能快速建立信心的專案" }
                     ],
                     EN: [
                         { f: "SME Advantage", b: "Flexibility & Fast Decision-making" },
-                        { f: "Hidden Champions", b: "Niche leaders with high market share" },
-                        { f: "Digital Divide", b: "Inequality in tech capability" },
                         { f: "Quick Win", b: "Low cost, high visibility project" }
                     ]
                 },
                 quiz: {
-                    TC: [
-                        { q: "台灣中小企業佔比約為多少？", a: ["50%", "70%", "98%"], c: 2 },
-                        { q: "在本課程架構中，AI 應扮演什麼角色？", a: ["人類取代者", "決策副駕駛", "純娛樂工具"], c: 1 }
-                    ],
-                    EN: [
-                        { q: "What is the approximate SME percentage in Taiwan?", a: ["50%", "70%", "98%"], c: 2 },
-                        { q: "What is the primary role of AI in this framework?", a: ["Human Replacer", "Co-pilot", "Toy"], c: 1 }
-                    ]
+                    TC: [ { q: "台灣中小企業佔比約為多少？", a: ["50%", "70%", "98%"], c: 2 } ],
+                    EN: [ { q: "What is the approximate SME percentage in Taiwan?", a: ["50%", "70%", "98%"], c: 2 } ]
                 }
             },
-            // 未來可在這裡擴充單元 2-6 的中英對照資料
+            2: {
+                title: { TC: "3P 變革模型", EN: "3P Change Model" },
+                deepDive: {
+                    TC: "變革最大的阻礙通常不是技術，而是「組織慣性」。我們採用 3P 模型：Position (策略定位)、Process (作業流程) 與 People (人員文化) 來推動整體轉型。必須讓員工明白，AI 是輔助他們的工具，而不是來取代他們的工作。",
+                    EN: "The biggest barrier to change is often not technology, but 'organizational inertia'. We use the 3P model: Position, Process, and People to drive transformation holistically."
+                },
+                cards: {
+                    TC: [
+                        { f: "3P 模型要素", b: "Position(定位), Process(流程), People(人)" },
+                        { f: "組織慣性", b: "維持現狀、抗拒改變的內部力量" }
+                    ],
+                    EN: [
+                        { f: "3P Model", b: "Position, Process, People" },
+                        { f: "Org Inertia", b: "Internal resistance to change" }
+                    ]
+                },
+                quiz: {
+                    TC: [ { q: "在 3P 變革模型中，最難改變的通常是哪一項？", a: ["Position (定位)", "Process (流程)", "People (人)"], c: 2 } ],
+                    EN: [ { q: "In the 3P model, which is typically hardest to change?", a: ["Position", "Process", "People"], c: 2 } ]
+                }
+            },
+            3: {
+                title: { TC: "數位轉型層次", EN: "Digital Transformation Levels" },
+                deepDive: {
+                    TC: "數位轉型是一段旅程，分為三個層次：1. 數位化 (Digitization)，將類比資訊轉為數位格式；2. 數位優化 (Digitalization)，利用數位技術改善現有作業流程效率；3. 數位轉型 (Digital Transformation)，徹底改變企業商業模式與創造價值的方式。",
+                    EN: "Transformation occurs in 3 stages: Digitization (analog to digital), Digitalization (optimizing processes), and Digital Transformation (fundamentally changing business models)."
+                },
+                cards: {
+                    TC: [
+                        { f: "Digitization (數位化)", b: "資料格式轉換，例如紙本轉為 PDF" },
+                        { f: "Digitalization (數位優化)", b: "流程改善，例如導入 ERP 系統" }
+                    ],
+                    EN: [
+                        { f: "Digitization", b: "Converting analog data to digital" },
+                        { f: "Digitalization", b: "Optimizing existing processes" }
+                    ]
+                },
+                quiz: {
+                    TC: [ { q: "商業模式的根本改變屬於下列哪一個層次？", a: ["數位化", "數位優化", "數位轉型"], c: 2 } ],
+                    EN: [ { q: "Fundamental change in business models is known as?", a: ["Digitization", "Digitalization", "Digital Transformation"], c: 2 } ]
+                }
+            },
+            4: {
+                title: { TC: "AI 分類定義", EN: "AI Definitions" },
+                deepDive: {
+                    TC: "本課程強調 AI 應做為「擴增智慧」(Augmented Intelligence)。了解不同 AI 類型的功能至關重要，例如生成式 AI (Generative AI) 擅長創造新內容，而代理人 AI (Agentic AI) 則能自主設定目標並採取行動。",
+                    EN: "This course emphasizes AI as 'Augmented Intelligence'. Understanding AI types is crucial: Generative AI creates new content, while Agentic AI pursues goals autonomously."
+                },
+                cards: {
+                    TC: [
+                        { f: "擴增智慧", b: "強調 AI 是做為人類決策的輔助工具" },
+                        { f: "生成式 AI", b: "能夠創造文字、圖像等新內容的模型" }
+                    ],
+                    EN: [
+                        { f: "Augmented Intelligence", b: "AI acting as an assistant to humans" },
+                        { f: "Generative AI", b: "Models that create new content" }
+                    ]
+                },
+                quiz: {
+                    TC: [ { q: "ChatGPT 主要屬於哪一種 AI 類型？", a: ["規則式 AI", "生成式 AI", "實體 AI"], c: 1 } ],
+                    EN: [ { q: "ChatGPT primarily belongs to which AI type?", a: ["Rule-based AI", "Generative AI", "Physical AI"], c: 1 } ]
+                }
+            },
+            5: {
+                title: { TC: "實施方法論 (CRISP-DM)", EN: "Implementation Methodology" },
+                deepDive: {
+                    TC: "AI 專案實施建議採用 CRISP-DM 標準流程。它包含六大步驟：商業理解、數據理解、數據準備、模型建立、評估、以及部署。其中「數據準備」包含清洗與標註，通常會佔據專案 70-80% 的時間。",
+                    EN: "AI projects should follow the CRISP-DM process: Business Understanding, Data Understanding, Data Preparation, Modeling, Evaluation, and Deployment. Data Preparation often takes 70-80% of the time."
+                },
+                cards: {
+                    TC: [
+                        { f: "CRISP-DM 第一步", b: "商業理解 (定義問題與目標)" },
+                        { f: "最耗時的階段", b: "數據準備 (清洗與整理)" }
+                    ],
+                    EN: [
+                        { f: "CRISP-DM Step 1", b: "Business Understanding" },
+                        { f: "Most Time-Consuming", b: "Data Preparation" }
+                    ]
+                },
+                quiz: {
+                    TC: [ { q: "在 CRISP-DM 中，通常花費最多時間的階段是？", a: ["模型建立", "數據準備", "系統部署"], c: 1 } ],
+                    EN: [ { q: "Which phase is typically most time-consuming in CRISP-DM?", a: ["Modeling", "Data Prep", "Deployment"], c: 1 } ]
+                }
+            },
+            6: {
+                title: { TC: "數據與 ROI", EN: "Data & ROI" },
+                deepDive: {
+                    TC: "數據是 AI 的燃料，打破部門間的「數據孤島」並建立單一數據源 (SSOT) 是首要任務。在評估 AI 導入的 ROI (投資報酬率) 時，除了可量化的財務指標外，也絕不能忽略如決策速度提升、員工滿意度等「無形效益」。",
+                    EN: "Data is the fuel for AI. Breaking data silos to build a Single Source of Truth (SSOT) is a priority. ROI evaluation must include intangible 'Soft Benefits' like decision speed."
+                },
+                cards: {
+                    TC: [
+                        { f: "SSOT", b: "單一數據源 (Single Source of Truth)" },
+                        { f: "無形效益", b: "難以直接量化但極具價值的效益 (如品牌形象)" }
+                    ],
+                    EN: [
+                        { f: "SSOT", b: "Single Source of Truth" },
+                        { f: "Soft Benefits", b: "Intangible value like brand image" }
+                    ]
+                },
+                quiz: {
+                    TC: [ { q: "為了確保全組織的數據一致性，我們應該建立？", a: ["多重備份系統", "單一數據源 (SSOT)", "數據孤島"], c: 1 } ],
+                    EN: [ { q: "To ensure data consistency across the organization, we build?", a: ["Multiple backups", "SSOT", "Data Silos"], c: 1 } ]
+                }
+            }
         };
 
         // --- UI 元件 ---
@@ -283,7 +377,7 @@
                             <span className="font-bold text-bcg-green dark:text-bcg-gold">{data.f}</span>
                         </div>
                         <div className="absolute inset-0 backface-hidden rotate-y-180 bg-bcg-green text-white rounded-xl p-4 md:p-6 flex items-center justify-center text-center shadow-xl">
-                            <span className="text-sm md:text-base">{data.b}</span>
+                            <span className="text-sm md:text-base leading-relaxed">{data.b}</span>
                         </div>
                     </div>
                 </div>
@@ -293,6 +387,8 @@
         const Quiz = ({ questions, onResult, t }) => {
             const [idx, setIdx] = useState(0);
             const [selected, setSelected] = useState(null);
+            
+            if (!questions || questions.length === 0) return null;
             const q = questions[idx];
 
             const handleAns = (i) => {
@@ -406,7 +502,7 @@
 
             const logClick = () => setStats(s => ({ ...s, clicks: s.clicks + 1 }));
 
-            // 語音導覽 - 增強語言選擇的精準度
+            // 語音導覽
             const toggleTTS = () => {
                 if (isSpeaking) {
                     window.speechSynthesis.cancel();
@@ -430,7 +526,6 @@
                 }
             };
 
-            // 切換語言時停止語音
             const handleLangChange = () => {
                 window.speechSynthesis.cancel();
                 setIsSpeaking(false);
@@ -438,7 +533,7 @@
                 logClick();
             };
 
-            // 跳轉頁面時停止語音，並回到頂部
+            // 跳轉頁面
             const jumpTo = (u) => {
                 window.speechSynthesis.cancel();
                 setIsSpeaking(false);
@@ -477,15 +572,19 @@
 
             // --- 渲染區塊 ---
 
+            // 單元 0 (首頁) - 動態顯示完整單元名稱
             const renderUnit0 = () => (
                 <div className="space-y-8 animate-fadeIn">
                     <div className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-xl border-l-8 border-bcg-green">
                         <h1 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-bcg-green dark:text-bcg-gold">{t.title}</h1>
                         <p className="text-base md:text-lg leading-relaxed text-justify mb-8">{t.unit0.summary}</p>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-                            {t.unit0.blocks.map((b, i) => (
-                                <button key={i} onClick={() => jumpTo(i+1)} className="p-3 md:p-4 bg-bcg-light dark:bg-slate-700 rounded-xl hover:bg-bcg-gold/20 border-2 border-transparent hover:border-bcg-gold transition font-bold text-xs md:text-sm shadow-sm">
-                                    {b}
+                        
+                        {/* 修正：將名稱未完整列出的問題解決，透過 slice(1) 直接抓取導覽列全名 */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                            {t.nav.slice(1).map((navName, i) => (
+                                <button key={i} onClick={() => jumpTo(i+1)} className="flex items-center justify-between p-4 bg-bcg-light dark:bg-slate-700 rounded-xl hover:bg-bcg-gold/20 border-2 border-transparent hover:border-bcg-gold transition shadow-sm text-left group">
+                                    <span className="font-bold text-sm text-bcg-green dark:text-gray-100 group-hover:text-bcg-gold transition-colors">{navName}</span>
+                                    <Icon name="arrowRight" size={16} className="text-gray-400 group-hover:text-bcg-gold transition-colors" />
                                 </button>
                             ))}
                         </div>
@@ -493,6 +592,7 @@
                 </div>
             );
 
+            // 單元 1 到 6 (標準內容頁) - 修正：不再永遠只顯示單元1的內容
             const renderStandardUnit = (u) => {
                 const data = UNIT_DATA[u] || UNIT_DATA[1];
                 return (
@@ -512,8 +612,8 @@
                         <div className="grid md:grid-cols-2 gap-8">
                             <div className="space-y-4">
                                 <h4 className="font-bold flex items-center gap-2 text-bcg-green dark:text-white"><Icon name="sun" size={16}/> {t.common.cardsTitle}</h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {data.cards[lang].slice(0, 2).map((c, i) => (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {data.cards[lang].map((c, i) => (
                                         <FlipCard key={i} data={c} onRead={() => setStats(s => {
                                             const newSet = new Set(s.cardsRead);
                                             newSet.add(`${u}-${i}`);
@@ -532,6 +632,28 @@
                 );
             };
 
+            // 修正：補上單元 7 (互動實驗室) 與 單元 8 (外部資源) 的預留畫面，防止白畫面
+            const renderUnit7 = () => (
+                <div className="space-y-8 animate-fadeIn text-center py-20">
+                    <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 inline-block">
+                        <Icon name="sun" size={48} className="mx-auto text-bcg-gold mb-4 animate-pulse" />
+                        <h2 className="text-2xl font-bold mb-2 text-bcg-green dark:text-bcg-gold">{t.nav[7]}</h2>
+                        <p className="text-gray-500">{lang === 'TC' ? '互動實驗室即將推出 (Coming Soon)...' : 'Interactive Lab Coming Soon...'}</p>
+                    </div>
+                </div>
+            );
+
+            const renderUnit8 = () => (
+                <div className="space-y-8 animate-fadeIn text-center py-20">
+                    <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 inline-block">
+                        <Icon name="globe" size={48} className="mx-auto text-bcg-gold mb-4" />
+                        <h2 className="text-2xl font-bold mb-2 text-bcg-green dark:text-bcg-gold">{t.nav[8]}</h2>
+                        <p className="text-gray-500">{lang === 'TC' ? '外部學習資源即將推出 (Coming Soon)...' : 'External Resources Coming Soon...'}</p>
+                    </div>
+                </div>
+            );
+
+            // 單元 9 (學習歷程)
             const renderUnit9 = () => (
                 <div className="space-y-6 animate-fadeIn">
                     <div className="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
@@ -591,7 +713,7 @@
                                 <Icon name="voice" />
                             </button>
                             <button onClick={handleLangChange} className="flex items-center gap-1 text-[10px] md:text-xs font-bold bg-bcg-light dark:bg-slate-800 px-3 py-1.5 md:py-2 rounded-full border border-gray-200 dark:border-slate-700 hover:border-bcg-gold transition-colors shadow-sm">
-                                <Icon name="globe" size={14} /> {lang}
+                                <Icon name="globe" size={14} /> {lang === 'EN' ? 'TC' : 'EN'}
                             </button>
                             <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-bcg-gold transition-colors">
                                 {darkMode ? <Icon name="sun" /> : <Icon name="moon" />}
@@ -618,7 +740,9 @@
                     <main className="flex-1 mt-16 pb-16 px-4 md:px-8 max-w-5xl mx-auto w-full">
                         <div className="py-6 md:py-8">
                             {currentUnit === 0 && renderUnit0()}
-                            {currentUnit > 0 && currentUnit < 7 && renderStandardUnit(currentUnit)}
+                            {currentUnit >= 1 && currentUnit <= 6 && renderStandardUnit(currentUnit)}
+                            {currentUnit === 7 && renderUnit7()}
+                            {currentUnit === 8 && renderUnit8()}
                             {currentUnit === 9 && renderUnit9()}
                         </div>
                         
